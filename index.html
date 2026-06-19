@@ -221,7 +221,7 @@
         });
 
         function kirimLogLoginKeCloud(idUser) {
-            if(SCRIPT_URL === "PASTIKAN_URL_WEB_APP_ANDA_DISINI") return;
+            if(SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxmLMyW408lzBcFwVSTNEvauEK7zHnJK-D2jRQy4wh8U5_VvY4EZ5H7z8Gfq0Htfj_cFQ/exec") return;
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "catat_login", id: 'log_' + Math.random().toString(36).substr(2, 9), userId: idUser }) });
         }
 
