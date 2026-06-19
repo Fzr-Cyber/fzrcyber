@@ -405,9 +405,13 @@
             document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
             document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
 
-                    // --- KODE BARU UNTUK KALKULASI SALDO AWAL & AKHIR ---
+        // --- KODE REVISI: KALKULASI & PENYIMPANAN OTOMATIS LOCALSTORAGE ---
         let saldoAwalIDR = parseFloat(document.getElementById('input-saldo-awal-idr').value) || 0;
         let saldoAwalUSD = parseFloat(document.getElementById('input-saldo-awal-usd').value) || 0;
+
+        // Kunci nilai ke dalam localStorage setiap kali ada perubahan input
+        localStorage.setItem('saved_saldo_awal_idr', saldoAwalIDR);
+        localStorage.setItem('saved_saldo_awal_usd', saldoAwalUSD);
 
         let saldoAkhirIDR = saldoAwalIDR + incomeIDR - expenseIDR;
         let saldoAkhirUSD = saldoAwalUSD + incomeUSD - expenseUSD;
@@ -435,10 +439,27 @@
             }
         }
 
-        window.addEventListener("load", () => {
-            let savedUser = sessionStorage.getItem("fz_active_user");
-            if (savedUser) { currentUser = savedUser; authPage.classList.add('hidden'); mainApp.classList.remove('hidden'); navTopContainer.classList.remove('hidden'); aturTampilanDashboard(); ambilDataDariCloud(); }
-        });
+window.addEventListener("load", () => {
+    let savedUser = sessionStorage.getItem("fz_active_user");
+    if (savedUser) { 
+        currentUser = savedUser; 
+        authPage.classList.add('hidden'); 
+        mainApp.classList.remove('hidden'); 
+        navTopContainer.classList.remove('hidden'); 
+    }
+
+    // MEMUAT DATA KUNCIAN AGAR TIDAK HILANG SAAT REFRESH
+    let localIDR = localStorage.getItem('saved_saldo_awal_idr') || 0;
+    let localUSD = localStorage.getItem('saved_saldo_awal_usd') || 0;
+    
+    document.getElementById('input-saldo-awal-idr').value = localIDR;
+    document.getElementById('input-saldo-awal-usd').value = localUSD;
+
+    // Menghitung ulang saldo saat pertama kali aplikasi dibuka
+    if (typeof ambilDataDariCloud === 'function') {
+        ambilDataDariCloud();
+    }
+});
         document.getElementById('input-saldo-awal-idr').addEventListener('input', () => {
     if (typeof ambilDataDariCloud === 'function') ambilDataDariCloud();
 });
