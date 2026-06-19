@@ -178,7 +178,7 @@
         </div>
     </div>
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQibg9o3nSlw3l9cMHzvtmSkwHvhyNx188FbV_ZGeejZ7LzckRgX7j1pcxZcm9pdmwDg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTrHgNpyTeVu_DgvlAw4LOPgA4xp4_SkEmkS9b71-LJyG52kc1Sumed4euJ4B1AKPZOQ/exec";
 
         const authPage = document.getElementById('auth-page');
         const mainApp = document.getElementById('main-app');
@@ -221,7 +221,7 @@
         });
 
         function kirimLogLoginKeCloud(idUser) {
-            if(SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxQibg9o3nSlw3l9cMHzvtmSkwHvhyNx188FbV_ZGeejZ7LzckRgX7j1pcxZcm9pdmwDg/exec") return;
+            if(SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwTrHgNpyTeVu_DgvlAw4LOPgA4xp4_SkEmkS9b71-LJyG52kc1Sumed4euJ4B1AKPZOQ/exec") return;
             fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "catat_login", id: 'log_' + Math.random().toString(36).substr(2, 9), userId: idUser }) });
         }
 
