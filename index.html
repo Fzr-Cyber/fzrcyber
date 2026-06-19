@@ -128,13 +128,11 @@
 
             <div id="table-card">
 <div class="summary-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-    <!-- KOLOM 1: INPUT SALDO AWAL -->
-    <div class="card-income" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
-        <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 5px;">Input Saldo Awal</small>
-        <div style="display: flex; flex-direction: column; gap: 5px;">
-            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="padding: 4px 8px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; width: 100%;">
-            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="padding: 4px 8px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; width: 100%;">
-        </div>
+<!-- Ganti Kolom 1 di dalam summary-box menjadi Kotak Teks Saldo Awal biasa -->
+<div class="card-income" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
+    <small style="color: #1e40af; font-weight: 600;">Saldo Awal</small>
+    <p id="total-starting" class="card-amount" style="color: #1e3a8a;">IDR 0<br>USD 0</p>
+</div>
     </div>
 
     <!-- KOLOM 2: TOTAL PEMASUKAN -->
