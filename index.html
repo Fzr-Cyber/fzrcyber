@@ -440,6 +440,7 @@ window.addEventListener("load", () => {
         mainApp.classList.remove('hidden'); 
         navTopContainer.classList.remove('hidden'); 
     }
+});
 
     // MEMUAT DATA KUNCIAN AGAR TIDAK HILANG SAAT REFRESH
     let localIDR = localStorage.getItem('saved_saldo_awal_idr') || 0;
@@ -452,13 +453,6 @@ window.addEventListener("load", () => {
     if (typeof ambilDataDariCloud === 'function') {
         ambilDataDariCloud();
     }
-});
-
-        document.getElementById('input-saldo-awal-idr').addEventListener('input', () => {
-    if (typeof ambilDataDariCloud === 'function') ambilDataDariCloud();
-});
-document.getElementById('input-saldo-awal-usd').addEventListener('input', () => {
-    if (typeof ambilDataDariCloud === 'function') ambilDataDariCloud();
 });
     </script>
 </body>
