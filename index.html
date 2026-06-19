@@ -412,3 +412,39 @@
     </script>
 </body>
 </html>
+// 1. Ambil elemen input Saldo Awal berdasarkan strukturnya
+const inputAwalIDR = document.querySelector('#table-card .summary-box .card-income input[placeholder="IDR (Rp)"]') || document.getElementById('input-saldo-awal-idr');
+const inputAwalUSD = document.querySelector('#table-card .summary-box .card-income input[placeholder="USD ($)"]') || document.getElementById('input-saldo-awal-usd');
+
+// 2. Buat fungsi kalkulasi otomatis
+function hitungSaldoAkhirOtomatis() {
+    // Ambil nominal input saldo awal, jika kosong setel ke 0
+    let saldoAwalIDR = parseFloat(inputAwalIDR.value) || 0;
+    let saldoAwalUSD = parseFloat(inputAwalUSD.value) || 0;
+
+    // Ambil teks angka dari kotak "Total Pemasukan" & "Total Pengeluaran" yang ada di web saat ini
+    let teksPemasukan = document.getElementById('total-income').innerText;
+    let teksPengeluaran = document.getElementById('total-expense').innerText;
+
+    // Bersihkan teks (hilangkan Rp, $, titik, koma) agar menjadi angka murni untuk dihitung
+    let masukIDR = parseFloat(teksPemasukan.match(/Rp\s*([\d.]+)/)?.[1].replace(/\./g, '')) || 0;
+    let masukUSD = parseFloat(teksPemasukan.match(/\$\s*([\d.]+)/)?.[1]) || 0;
+    
+    let keluarIDR = parseFloat(teksPengeluaran.match(/Rp\s*([\d.]+)/)?.[1].replace(/\./g, '')) || 0;
+    let keluarUSD = parseFloat(teksPengeluaran.match(/\$\s*([\d.]+)/)?.[1]) || 0;
+
+    // Rumus Matematika Saldo Akhir
+    let akhirIDR = saldoAwalIDR + masukIDR - keluarIDR;
+    let akhirUSD = saldoAwalUSD + masukUSD - keluarUSD;
+
+    // Cetak hasilnya langsung ke kotak "Saldo Akhir"
+    document.getElementById('total-ending').innerHTML = `
+        IDR ${akhirIDR.toLocaleString('id-ID')}<br>
+        USD ${akhirUSD.toLocaleString('en-US')}
+    `;
+}
+
+// 3. Aktifkan Event Listener agar fungsi berjalan otomatis SETIAP KALI Anda mengetik angka
+if (inputAwalIDR) inputAwalIDR.addEventListener('input', hitungSaldoAkhirOtomatis);
+if (inputAwalUSD) inputAwalUSD.addEventListener('input', hitungSaldoAkhirOtomatis);
+
