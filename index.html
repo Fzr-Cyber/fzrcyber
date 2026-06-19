@@ -404,8 +404,17 @@
             }
             document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
             document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
-        }
 
+                    // --- KODE BARU UNTUK KALKULASI SALDO AWAL & AKHIR ---
+        let saldoAwalIDR = parseFloat(document.getElementById('input-saldo-awal-idr').value) || 0;
+        let saldoAwalUSD = parseFloat(document.getElementById('input-saldo-awal-usd').value) || 0;
+
+        let saldoAkhirIDR = saldoAwalIDR + incomeIDR - expenseIDR;
+        let saldoAkhirUSD = saldoAwalUSD + incomeUSD - expenseUSD;
+
+        document.getElementById('total-ending').innerHTML = `${formatUang(saldoAkhirIDR, 'IDR')}<br>${formatUang(saldoAkhirUSD, 'USD')}`;
+
+          }  
         form.addEventListener('submit', e => {
             e.preventDefault(); btnSubmit.disabled = true; btnSubmit.textContent = "Menyimpan...";
             const payload = {
@@ -430,6 +439,12 @@
             let savedUser = sessionStorage.getItem("fz_active_user");
             if (savedUser) { currentUser = savedUser; authPage.classList.add('hidden'); mainApp.classList.remove('hidden'); navTopContainer.classList.remove('hidden'); aturTampilanDashboard(); ambilDataDariCloud(); }
         });
+        document.getElementById('input-saldo-awal-idr').addEventListener('input', () => {
+    if (typeof ambilDataDariCloud === 'function') ambilDataDariCloud();
+});
+document.getElementById('input-saldo-awal-usd').addEventListener('input', () => {
+    if (typeof ambilDataDariCloud === 'function') ambilDataDariCloud();
+});
     </script>
 </body>
 </html>
