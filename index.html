@@ -158,12 +158,18 @@
     </div>
 
 </div> <!-- PENUTUP KONTANER UTAMA -->
-
-<!-- JAVASCRIPT OTOMATISASI -->
+<!-- JAVASCRIPT OTOMATISASI DENGAN PENYIMPANAN LOCALSTORAGE -->
 <script>
 function hitungSaldoAkhir() {
-    let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
-    let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+    let inputIDR = document.getElementById("input-saldo-awal-idr");
+    let inputUSD = document.getElementById("input-saldo-awal-usd");
+
+    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
+    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
+
+    // SIMPAN DATA: Mengunci nilai input ke memori browser agar tidak hilang saat refresh
+    localStorage.setItem("saldoAwalIDR", inputIDR.value);
+    localStorage.setItem("saldoAwalUSD", inputUSD.value);
 
     let teksPemasukan = document.getElementById("total-income").innerHTML;
     let teksPengeluaran = document.getElementById("total-expense").innerHTML;
@@ -185,9 +191,20 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
+// MEMUAT DATA KEMBALI SAAT REFRESH
+window.addEventListener("DOMContentLoaded", function() {
+    let simpananIDR = localStorage.getItem("saldoAwalIDR");
+    let simpananUSD = localStorage.getItem("saldoAwalUSD");
+
+    if (simpananIDR !== null) document.getElementById("input-saldo-awal-idr").value = simpananIDR;
+    if (simpananUSD !== null) document.getElementById("input-saldo-awal-usd").value = simpananUSD;
+
+    hitungSaldoAkhir();
+});
+
+// Jalankan kalkulasi setiap kali user mengetik angka baru
 document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
 document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
-window.addEventListener("DOMContentLoaded", hitungSaldoAkhir);
 </script>
 
   
