@@ -383,6 +383,100 @@
                 aturTampilanDashboard(); ambilDataDariCloud(); 
             }
         });
+        // --- TAMBAHAN BARU: SINKRONISASI SALDO AWAL KE GOOGLE SHEETS VIA VERCEL ---
+function dapatkanUserAktif() {
+    return typeof currentUser !== 'undefined' ? currentUser : (sessionStorage.getItem("fz_active_user") || "MASTER ADMIN");
+}
+
+async function muatSaldoDariDatabaseServer() {
+    try {
+        let username = dapatkanUserAktif();
+        let response = await fetch(`/api/get-saldo-awal?username=${encodeURIComponent(username)}`); 
+        if (response.ok) {
+            let data = await response.json();
+            if (data.saldo_idr !== undefined) document.getElementById("input-saldo-awal-idr").value = data.saldo_idr;
+            if (data.saldo_usd !== undefined) document.getElementById("input-saldo-awal-usd").value = data.saldo_usd;
+            hitungSaldoAkhir();
+        }
+    } catch (error) {
+        console.error("Gagal memuat saldo awal dari Google Sheets:", error);
+    }
+}
+
+let timeoutSimpanCloud;
+function simpanSaldoKeDatabaseServer() {
+    clearTimeout(timeoutSimpanCloud);
+    timeoutSimpanCloud = setTimeout(async () => {
+        let idr = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+        let usd = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+        let username = dapatkanUserAktif();
+
+        try {
+            await fetch('/api/save-saldo-awal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    username: username,
+                    saldo_idr: idr, 
+                    saldo_usd: usd 
+                })
+            });
+            console.log("Saldo awal berhasil disinkronkan ke Google Sheets!");
+        } catch (error) {
+            console.error("Gagal sinkronisasi data ke cloud database:", error);
+        }
+    }, 800);
+}
+
+function hitungSaldoAkhir() {
+    let inputIDR = document.getElementById("input-saldo-awal-idr");
+    let inputUSD = document.getElementById("input-saldo-awal-usd");
+    if (!inputIDR || !inputUSD) return;
+
+    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
+    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
+
+    localStorage.setItem("app_saldoAwalIDR", inputIDR.value);
+    localStorage.setItem("app_saldoAwalUSD", inputUSD.value);
+
+    let teksPemasukan = document.getElementById("total-income").innerHTML;
+    let teksPengeluaran = document.getElementById("total-expense").innerHTML;
+
+    function ekstrakNilai(teks) {
+        let bagian = teks.split(/<br\s*\/?>/i);
+        let idr = bagian ? parseFloat(bagian[0].replace(/[^0-9.-]+/g, "")) : 0;
+        let usd = bagian && bagian[1] ? parseFloat(bagian[1].replace(/[^0-9.-]+/g, "")) : 0;
+        return { idr: isNaN(idr) ? 0 : idr, usd: isNaN(usd) ? 0 : usd };
+    }
+
+    let pemasukan = ekstrakNilai(teksPemasukan);
+    let pengeluaran = ekstrakNilai(teksPengeluaran);
+
+    let totalIDR = saldoAwalIDR + pemasukan.idr - pengeluaran.idr;
+    let totalUSD = saldoAwalUSD + pemasukan.usd - pengeluaran.usd;
+
+    document.getElementById("total-ending").innerHTML = 
+        `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
+}
+
+// Menghubungkan fungsi ke elemen input HTML Anda
+document.addEventListener("DOMContentLoaded", () => {
+    let inputIDR = document.getElementById("input-saldo-awal-idr");
+    let inputUSD = document.getElementById("input-saldo-awal-usd");
+    
+    if(inputIDR && inputUSD) {
+        let simpananIDR = localStorage.getItem("app_saldoAwalIDR");
+        let simpananUSD = localStorage.getItem("app_saldoAwalUSD");
+        if (simpananIDR !== null) inputIDR.value = simpananIDR;
+        if (simpananUSD !== null) inputUSD.value = simpananUSD;
+
+        hitungSaldoAkhir();
+        muatSaldoDariDatabaseServer();
+
+        inputIDR.addEventListener("input", () => { hitungSaldoAkhir(); simpanSaldoKeDatabaseServer(); });
+        inputUSD.addEventListener("input", () => { hitungSaldoAkhir(); simpanSaldoKeDatabaseServer(); });
+    }
+});
     </script>
 </body>
 </html>
