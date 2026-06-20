@@ -128,12 +128,14 @@
             <div id="table-card">
 <div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
 
+  <div class="summary-wrapper" style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
+
     <!-- KOLOM 1: INPUT SALDO AWAL -->
     <div class="card" style="flex: 1; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
         <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="IDR (Rp)" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
-            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="USD ($)" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
+            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
+            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
         </div>
     </div>
 
@@ -155,23 +157,17 @@
         <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
     </div>
 
-</div> <!-- PENUTUP KONTANER UTAMA -->
+</div>
 
-localStorage, melainkan mengirimkan data (POST/PUT) ke server backend Anda saat pengguna selesai mengetik, dan mengambil data (GET) saat halaman dimuat.Silakan ganti skrip lama Anda dengan logika integrasi database berikut (Sesuaikan URL /api/... dengan rute backend asli Anda):html<!-- JAVASCRIPT INTEGRASI DATABASE (SINKRON PC & HP) -->
+<!-- JAVASCRIPT INTEGRASI DATABASE (SINKRON PC & HP) -->
 <script>
-// Fungsi untuk mengambil data saldo awal dari database saat halaman dibuka
 async function muatSaldoAwalDariDatabase() {
     try {
-        // Ganti URL ini dengan endpoint API backend Anda untuk mengambil data
         let response = await fetch('/api/get-saldo-awal'); 
         if (response.ok) {
             let data = await response.json();
-            
-            // Masukkan data dari database ke kolom input
             document.getElementById("input-saldo-awal-idr").value = data.saldo_idr || 0;
             document.getElementById("input-saldo-awal-usd").value = data.saldo_usd || 0;
-            
-            // Hitung ulang tampilan saldo akhir
             hitungSaldoAkhir();
         }
     } catch (error) {
@@ -179,23 +175,19 @@ async function muatSaldoAwalDariDatabase() {
     }
 }
 
-// Fungsi untuk menyimpan data ke database saat pengguna mengubah nilai input
 let timeoutSimpan;
 function simpanSaldoKeDatabase() {
-    // Debounce: Menunggu user selesai mengetik (500ms) baru dikirim ke server agar tidak membebani database
     clearTimeout(timeoutSimpan);
     timeoutSimpan = setTimeout(async () => {
         let saldoIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
         let saldoUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
 
         try {
-            // Ganti URL ini dengan endpoint API backend Anda untuk menyimpan data
             await fetch('/api/save-saldo-awal', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ saldo_idr: saldoIDR, saldo_usd: saldoUSD })
             });
-            console.log("Saldo awal berhasil disinkronkan ke database.");
         } catch (error) {
             console.error("Gagal sinkronisasi ke database:", error);
         }
@@ -226,7 +218,6 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
-// Event listener saat user mengetik: Hitung lokal + kirim ke database
 document.getElementById("input-saldo-awal-idr").addEventListener("input", () => {
     hitungSaldoAkhir();
     simpanSaldoKeDatabase();
@@ -236,7 +227,6 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", () => 
     simpanSaldoKeDatabase();
 });
 
-// Saat halaman dibuka (baik di PC / HP), langsung ambil data terbaru dari cloud database
 window.addEventListener("DOMContentLoaded", muatSaldoAwalDariDatabase);
 </script>
 
