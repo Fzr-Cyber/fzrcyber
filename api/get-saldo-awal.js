@@ -11,7 +11,7 @@ export default async function handler(req, res) {
         const username = req.query.username || "fajar";
         
         // PENTING: PAKAI LINK GOOGLE APPS SCRIPT ANDA YANG DIAWALI https://google.com...
-        const linkGoogleScript = "https://script.google.com/macros/s/AKfycbxq4q3zqR09ePp_00SIb5cM9iJeC95NGVFL3u_c12g9nAQBuh-0DxZXc0Q7GW92gykz5Q/exec";
+        const linkGoogleScript = "https://script.google.com/macros/s/AKfycbxahZLC6ikJu8YTeNLs3HWGLpumsuheQ843PNkOwZHjcGGoRW_zbOwKLKNxcz6AoHor5Q/exec";
 
         let response = await fetch(`${linkGoogleScript}?req=get_saldo_awal&username=${encodeURIComponent(username)}`);
         let data = await response.json();
