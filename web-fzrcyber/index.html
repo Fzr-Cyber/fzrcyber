@@ -472,18 +472,21 @@ const LINK_GOOGLE_SHEETS_ANDA = "https://script.google.com/macros/s/AKfycbyfNxG0
 async function muatSaldoDariDatabaseServer() {
     try {
         let username = dapatkanUserAktif();
+        // MENEMBAK LANGSUNG KE GOOGLE SCRIPT ANDA YANG AKTIF
         let response = await fetch(`https://google.com`); 
         if (response.ok) {
             let listTransaksi = await response.json();
+            
             // Menyaring data dari database transaksi dengan kategori khusus "Saldo Awal"
             let dataIDR = listTransaksi.find(t => t.category === "Saldo Awal" && t.mataUang === "IDR" && t.userId === username);
             let dataUSD = listTransaksi.find(t => t.category === "Saldo Awal" && t.mataUang === "USD" && t.userId === username);
 
             if (dataIDR && dataIDR.amount !== undefined) document.getElementById("input-saldo-awal-idr").value = dataIDR.amount;
             if (dataUSD && dataUSD.amount !== undefined) document.getElementById("input-saldo-awal-usd").value = dataUSD.amount;
+            
             hitungSaldoAkhir();
         }
-    } catch (error) { console.error(error); }
+    } catch (error) { console.error("Error Muat Cloud:", error); }
 }
 
 let timeoutSimpanCloud;
@@ -498,7 +501,7 @@ function simpanSaldoKeDatabaseServer() {
         let targetMataUang = idr > 0 ? "IDR" : "USD";
 
         try {
-            // Menggunakan fungsi "simpan" bawaan server Anda yang sudah terbukti berhasil
+            // MENEMBAK LANGSUNG KE GOOGLE SCRIPT DENGAN PARAMETER YANG DIKENAL SERVER GOOGLE ANDA
             await fetch(`https://google.com`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain' }, 
@@ -514,8 +517,8 @@ function simpanSaldoKeDatabaseServer() {
                     mataUang: targetMataUang
                 })
             });
-            console.log("Sukses masuk database utama!");
-        } catch (error) { console.error(error); }
+            console.log("Saldo awal sukses ditembak langsung ke Google Sheets!");
+        } catch (error) { console.error("Error Simpan Cloud:", error); }
     }, 1000);
 }
 
@@ -527,13 +530,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let simpananUSD = localStorage.getItem("app_saldoAwalUSD");
         if (simpananIDR !== null) inputIDR.value = simpananIDR;
         if (simpananUSD !== null) inputUSD.value = simpananUSD;
+        
         hitungSaldoAkhir();
         muatSaldoDariDatabaseServer();
+        
         inputIDR.addEventListener("input", () => { hitungSaldoAkhir(); simpanSaldoKeDatabaseServer(); });
         inputUSD.addEventListener("input", () => { hitungSaldoAkhir(); simpanSaldoKeDatabaseServer(); });
     }
 });
-
     </script>
 </body>
 </html>
