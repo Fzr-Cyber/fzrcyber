@@ -132,47 +132,30 @@
     <div class="card" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0;">
         <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="IDR (Rp)" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
-            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="USD ($)" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
+            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
+            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
         </div>
     </div>
 
     <!-- KOLOM 2: TOTAL PEMASUKAN -->
-    <div class="card-income">
+    <div class="card-income" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
         <small id="income-label">Total Pemasukan</small>
-        <p id="total-income" class="card-amount">IDR 0<br>USD 0</p>
+        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
     </div>
 
-<!-- KOLOM 4: SALDO AKHIR (OTOMATIS) -->
-<div class="card-income" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center;">
-    <small style="color: #374151; font-weight: 600;">Saldo Akhir</small>
-    <p id="total-ending" class="card-amount" style="color: #111827; font-weight: bold; margin-top: 5px;">
-        IDR 0<br>USD 0
-    </p>
+    <!-- KOLOM 3: TOTAL PENGELUARAN -->
+    <div class="card-expense" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <small id="expense-label">Total Pengeluaran</small>
+        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
+    </div>
+
+    <!-- KOLOM 4: SALDO AKHIR -->
+    <div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0; display: flex; flex-direction: column; justify-content: center;">
+        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
+        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
+    </div>
+
 </div>
-
-<script>
-function hitungSaldoOtomatis() {
-    // 1. Ambil nilai pemasukan (sesuaikan ID jika berbeda di kode Anda)
-    // Jika berbentuk input teks, gunakan .value. Jika berbentuk teks biasa, gunakan .innerText
-    let pemasukanIDR = parseFloat(document.getElementById("total-income-idr")?.innerText || 0);
-    let pemasukanUSD = parseFloat(document.getElementById("total-income-usd")?.innerText || 0);
-
-    // 2. Ambil nilai pengeluaran (sesuaikan ID jika berbeda di kode Anda)
-    let pengeluaranIDR = parseFloat(document.getElementById("total-expense-idr")?.innerText || 0);
-    let pengeluaranUSD = parseFloat(document.getElementById("total-expense-usd")?.innerText || 0);
-
-    // 3. Hitung Saldo Akhir
-    let saldoIDR = pemasukanIDR - pengeluaranIDR;
-    let saldoUSD = pemasukanUSD - pengeluaranUSD;
-
-    // 4. Tampilkan ke dalam elemen #total-ending
-    document.getElementById("total-ending").innerHTML = `IDR ${saldoIDR.toLocaleString('id-ID')}<br>USD ${saldoUSD.toLocaleString('en-US')}`;
-}
-
-// Jalankan fungsi ini setiap kali ada perubahan data data atau saat halaman selesai dimuat
-window.onload = hitungSaldoOtomatis;
-</script>
               
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
