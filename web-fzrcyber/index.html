@@ -385,25 +385,16 @@
         });
         // --- TAMBAHAN BARU: SINKRONISASI SALDO AWAL KE GOOGLE SHEETS VIA VERCEL ---
 function dapatkanUserAktif() {
-    // Mengambil langsung dari variabel login internal sistem Anda
+    // 1. Mengambil langsung dari variabel login internal sistem Anda
     if (typeof currentUser !== 'undefined' && currentUser) {
         return currentUser.toString().trim();
     }
-    // Jika halaman baru di-refresh, ambil dari session log browser
+    // 2. Jika halaman baru di-refresh, ambil dari session log browser
     let sessionUser = sessionStorage.getItem("fz_active_user");
     if (sessionUser) {
         return sessionUser.toString().trim();
     }
     return "fajar"; // Cadangan otomatis jika sistem belum membaca session
-}
-
-    let semuaElemen = document.querySelectorAll('*');
-    for (let i = 0; i < semuaElemen.length; i++) {
-        if (semuaElemen[i].innerText && semuaElemen[i].innerText.includes("Login sebagai ID:")) {
-            return semuaElemen[i].innerText.split("Login sebagai ID:")[1].trim();
-        }
-    }
-    return "guest_user";
 }
 
 async function muatSaldoDariDatabaseServer() {
