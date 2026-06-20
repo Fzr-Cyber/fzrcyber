@@ -127,11 +127,11 @@
 
             <div id="table-card">
 
-<!-- KONTANER UTAMA AGAR SEBARIS KE SAMPING -->
-<div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
+<!-- KONTANER UTAMA (SINKRON CLOUD DATABASE) -->
+<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
 
     <!-- KOLOM 1: INPUT SALDO AWAL -->
-    <div class="card" style="flex: 1; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
+    <div style="flex: 1; min-width: 200px; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
         <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
         <div style="display: flex; flex-direction: column; gap: 8px;">
             <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
@@ -140,36 +140,75 @@
     </div>
 
     <!-- KOLOM 2: TOTAL PEMASUKAN -->
-    <div class="card-income" style="flex: 1; background-color: #e6f4ea; border: 1px solid #34a853; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+    <div class="card-income" style="flex: 1; min-width: 200px; background-color: #e6f4ea; border: 1px solid #34a853; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
         <small id="income-label" style="color: #137333; font-weight: 600; display: block; margin-bottom: 8px;">Total Pemasukan</small>
         <p id="total-income" class="card-amount" style="color: #137333; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
     </div>
 
     <!-- KOLOM 3: TOTAL PENGELUARAN -->
-    <div class="card-expense" style="flex: 1; background-color: #fce8e6; border: 1px solid #ea4335; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+    <div class="card-expense" style="flex: 1; min-width: 200px; background-color: #fce8e6; border: 1px solid #ea4335; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
         <small id="expense-label" style="color: #c5221f; font-weight: 600; display: block; margin-bottom: 8px;">Total Pengeluaran</small>
         <p id="total-expense" class="card-amount" style="color: #c5221f; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
     </div>
 
     <!-- KOLOM 4: SALDO AKHIR -->
-    <div class="card" style="flex: 1; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+    <div style="flex: 1; min-width: 200px; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
         <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
         <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
     </div>
 
-</div> <!-- PENUTUP KONTANER UTAMA -->
-<!-- JAVASCRIPT OTOMATISASI DENGAN PENYIMPANAN LOCALSTORAGE -->
+</div>
+
+<!-- LOAD LIBRARY SUPABASE CDN -->
+<script src="https://jsdelivr.net"></script>
+
 <script>
+// PENTING: Ganti dengan URL dan API Key Proyek Supabase Anda sendiri
+const SUPABASE_URL = "URL_SUPABASE_ANDA"; 
+const SUPABASE_KEY = "ANON_KEY_SUPABASE_ANDA";
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// 1. Fungsi Mengambil Data dari Cloud Supabase saat Halaman Dibuka (PC/HP)
+async function muatSaldoDariCloud() {
+    try {
+        let { data, error } = await supabase
+            .from('settings_saldo')
+            .select('saldo_idr, saldo_usd')
+            .eq('id', 1)
+            .single();
+
+        if (data) {
+            document.getElementById("input-saldo-awal-idr").value = data.saldo_idr || 0;
+            document.getElementById("input-saldo-awal-usd").value = data.saldo_usd || 0;
+            hitungSaldoAkhir();
+        }
+    } catch (err) {
+        console.error("Gagal terhubung ke database cloud:", err);
+    }
+}
+
+// 2. Fungsi Menyimpan Data ke Cloud Supabase saat Selesai Mengetik
+let timerSimpan;
+function simpanSaldoKeCloud() {
+    clearTimeout(timerSimpan);
+    // Debounce 500ms agar tidak spam request ke server saat mengetik angka
+    timerSimpan = setTimeout(async () => {
+        let idr = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+        let usd = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+
+        await supabase
+            .from('settings_saldo')
+            .update({ saldo_idr: idr, saldo_usd: usd })
+            .eq('id', 1);
+            
+        console.log("Sinkronisasi Cloud Berhasil!");
+    }, 500);
+}
+
+// 3. Fungsi Hitung Saldo Akhir Komputer Lokal
 function hitungSaldoAkhir() {
-    let inputIDR = document.getElementById("input-saldo-awal-idr");
-    let inputUSD = document.getElementById("input-saldo-awal-usd");
-
-    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
-    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
-
-    // SIMPAN DATA: Mengunci nilai input ke memori browser agar tidak hilang saat refresh
-    localStorage.setItem("saldoAwalIDR", inputIDR.value);
-    localStorage.setItem("saldoAwalUSD", inputUSD.value);
+    let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+    let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
 
     let teksPemasukan = document.getElementById("total-income").innerHTML;
     let teksPengeluaran = document.getElementById("total-expense").innerHTML;
@@ -191,21 +230,20 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
-// MEMUAT DATA KEMBALI SAAT REFRESH
-window.addEventListener("DOMContentLoaded", function() {
-    let simpananIDR = localStorage.getItem("saldoAwalIDR");
-    let simpananUSD = localStorage.getItem("saldoAwalUSD");
-
-    if (simpananIDR !== null) document.getElementById("input-saldo-awal-idr").value = simpananIDR;
-    if (simpananUSD !== null) document.getElementById("input-saldo-awal-usd").value = simpananUSD;
-
+// Pasang Event Listener Ketikan
+document.getElementById("input-saldo-awal-idr").addEventListener("input", () => {
     hitungSaldoAkhir();
+    simpanSaldoKeCloud();
+});
+document.getElementById("input-saldo-awal-usd").addEventListener("input", () => {
+    hitungSaldoAkhir();
+    simpanSaldoKeCloud();
 });
 
-// Jalankan kalkulasi setiap kali user mengetik angka baru
-document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
-document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
+// Jalankan otomatis saat halaman selesai dimuat (baik di PC maupun HP)
+window.addEventListener("DOMContentLoaded", muatSaldoDariCloud);
 </script>
+
 
   
                 <div class="card" style="width: 100%;">
