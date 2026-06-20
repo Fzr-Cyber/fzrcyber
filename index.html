@@ -232,25 +232,33 @@
         });
 
         function masukAplikasi() {
-            authPage.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-            navTop.classList.remove('hidden');
-            document.getElementById('user-display').innerHTML = `Login sebagai ID: <strong>${currentUser}</strong>`;
-            document.getElementById('date').value = new Date().toISOString().split('T');
-            updateCategoryOptions();
-            loadTransactions();
-        }
+    authPage.classList.add('hidden');
+    mainApp.classList.remove('hidden');
+    navTop.classList.remove('hidden');
+    document.getElementById('user-display').innerHTML = `Login sebagai ID: <strong>${currentUser}</strong>`;
+    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+    
+    // TAMBAHKAN BARIS INI: Simpan ID user ke browser agar tidak hilang saat refresh
+    localStorage.setItem('fzr_session_user', currentUser);
+    
+    updateCategoryOptions();
+    loadTransactions();
+}
 
-        function keluarAkun() {
-            currentUser = null;
-            transactions = [];
-            authForm.reset();
-            document.getElementById('saldo-awal-idr').value = '';
-            document.getElementById('saldo-awal-usd').value = '';
-            authPage.classList.remove('hidden');
-            mainApp.classList.add('hidden');
-            navTop.classList.add('hidden');
-        }
+function keluarAkun() {
+    currentUser = null;
+    transactions = [];
+    authForm.reset();
+    document.getElementById('saldo-awal-idr').value = '';
+    document.getElementById('saldo-awal-usd').value = '';
+    
+    // TAMBAHKAN BARIS INI: Hapus ID user dari browser saat klik keluar
+    localStorage.removeItem('fzr_session_user');
+    
+    authPage.classList.remove('hidden');
+    mainApp.classList.add('hidden');
+    navTop.classList.add('hidden');
+}
 
         function updateCategoryOptions() {
             const selectedType = typeSelect.value;
@@ -365,7 +373,27 @@
             document.getElementById('saldo-akhir-display').innerHTML = 
                 "IDR " + saldoAkhirIDR.toLocaleString('id-ID') + "<br>" +
                 "USD " + saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-        }
-    </script>
-</body>
-</html>
+        // ========================================================
+        // KODE AGAR AKUN TIDAK OTOMATIS LOGOUT SAAT DI-REFRESH
+        // ========================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('fzr_session_user');
+            if (savedUser) {
+                currentUser = savedUser;
+                masukAplikasi();
+            }
+        });
+
+        // Modifikasi fungsi masuk & keluar asli Anda untuk mencatat sesi
+        const originalMasuk = masukAplikasi;
+        masukAplikasi = function() {
+            if (currentUser) localStorage.setItem('fzr_session_user', currentUser);
+            originalMasuk();
+        };
+
+        const originalKeluar = keluarAkun;
+        keluarAkun = function() {
+            localStorage.removeItem('fzr_session_user');
+            originalKeluar();
+        };
+
