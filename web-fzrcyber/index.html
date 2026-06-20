@@ -102,36 +102,6 @@
         </header>
 
         <div class="grid">
-            <div class="card" id="input-card">
-                <h3 style="margin-top:0; margin-bottom:15px;">Input Saldo Awal</h3>
-                <form id="finance-form">
-                    <div class="form-group">
-                        <label>Jenis</label>
-                        <select id="type"><option value="Pemasukan">Pemasukan</option><option value="Pengeluaran">Pengeluaran</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Kategori</label>
-                        <select id="category"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tanggal</label>
-                        <input type="date" id="date" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Jumlah & Mata Uang</label>
-                        <div class="currency-row">
-                            <select id="currency"><option value="IDR">IDR (Rp)</option><option value="USD">USD ($)</option></select>
-                            <input type="number" step="any" id="amount" placeholder="0" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Keterangan</label>
-                        <input type="text" id="description" required>
-                    </div>
-                    <button type="submit" id="btn-submit" class="btn-submit">Simpan Transaksi</button>
-                </form>
-            </div>
-
             <div id="table-card">
                 <div class="summary-box">
                     <div class="card-income">
@@ -198,14 +168,11 @@
         const btnAuth = document.getElementById('btn-auth');
         const authToggle = document.getElementById('auth-toggle');
         const userDisplay = document.getElementById('user-display');
-        const form = document.getElementById('finance-form');
         const typeSelect = document.getElementById('type');
         const categorySelect = document.getElementById('category');
         const currencySelect = document.getElementById('currency');
         const transactionList = document.getElementById('transaction-list');
-        const inputCard = document.getElementById('input-card');
         const tableGrid = document.querySelector('.grid');
-        const btnSubmit = document.getElementById('btn-submit');
         const adminLogCard = document.getElementById('admin-log-card');
         const adminControlCard = document.getElementById('admin-control-card');
         const userListAdmin = document.getElementById('user-list-admin');
@@ -219,21 +186,6 @@
         let currentUser = null;
         let isAdmin = false;
         let isLoginMode = true;
-
-        // Set tanggal hari ini
-        document.getElementById('date').valueAsDate = new Date();
-
-        // Ubah kategori berdasarkan jenis
-        typeSelect.addEventListener('change', () => {
-            categorySelect.innerHTML = '';
-            categories[typeSelect.value].forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                categorySelect.appendChild(option);
-            });
-        });
-        typeSelect.dispatchEvent(new Event('change'));
 
         // Auth Toggle
         authToggle.addEventListener('click', () => {
@@ -296,54 +248,6 @@
             loadAllData();
         }
 
-        // Submit Form Transaksi
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const newTransaction = {
-                date: document.getElementById('date').value,
-                type: typeSelect.value,
-                category: categorySelect.value,
-                description: document.getElementById('description').value,
-                currency: currencySelect.value,
-                amount: parseFloat(document.getElementById('amount').value)
-            };
-
-            if (!newTransaction.description || newTransaction.amount <= 0) {
-                alert('Semua field harus diisi dengan benar!');
-                return;
-            }
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'save_transaction',
-                        username: currentUser,
-                        transaction: newTransaction
-                    })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    // Reset form
-                    form.reset();
-                    document.getElementById('date').valueAsDate = new Date();
-                    typeSelect.dispatchEvent(new Event('change'));
-                    
-                    // Reload data
-                    loadAllData();
-                    alert('Transaksi berhasil disimpan!');
-                } else {
-                    alert('Error: ' + result.message);
-                }
-            } catch (error) {
-                alert('Gagal menyimpan transaksi: ' + error.message);
-            }
-        });
-
         async function loadAllData() {
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=get_transactions&username=${encodeURIComponent(currentUser)}`);
@@ -367,7 +271,7 @@
             transactionList.innerHTML = '';
             
             if (transactions.length === 0) {
-                transactionList.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada transaksi</td></tr>';
+                transactionList.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada data transaksi</td></tr>';
                 return;
             }
 
