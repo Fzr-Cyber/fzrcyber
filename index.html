@@ -9,6 +9,7 @@
         body { background-color: #f3f4f6; padding: 20px; color: #333; margin: 0; }
         .container { max-width: 1100px; margin: 0 auto; }
         
+        /* DESAIN MENU DROPDOWN BARU DI BAGIAN ATAS */
         .navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; align-items: center; }
         .dropdown { position: relative; display: inline-block; }
         .dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
@@ -28,7 +29,7 @@
         .btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
         .btn-logout { background-color: #dc2626; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .card-income { background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 12px; text-align: center; }
         .card-expense { background-color: #fff1f2; border: 1px solid #fecdd3; padding: 15px; border-radius: 12px; text-align: center; }
         .card-amount { font-size: 18px; font-weight: bold; margin: 5px 0 0 0; color: #065f46; line-height: 1.4; }
@@ -45,9 +46,11 @@
     </style>
 </head>
 <body>
-    <!-- NAV BAR DROPDOWN ATAS -->
+
+    <!-- NAV BAR DROPDOWN ATAS (Hanya Muncul Setelah Login) -->
     <div id="nav-top-container" class="container hidden" style="margin-top: 10px; margin-bottom: -10px;">
         <div class="navbar-top">
+            <!-- Dropdown Menu 1 -->
             <div class="dropdown">
                 <button class="dropbtn">Link Navigasi ▼</button>
                 <div class="dropdown-content">
@@ -57,6 +60,7 @@
                 </div>
             </div>
             
+            <!-- Dropdown Menu 2 (Bisa ditambahkan jika butuh) -->
             <div class="dropdown">
                 <button class="dropbtn" style="background-color: #4b5563;">Menu Lainnya ▼</button>
                 <div class="dropdown-content">
@@ -83,8 +87,6 @@
         </form>
         <div id="auth-toggle" class="auth-toggle">Belum punya akun? Daftar di sini</div>
     </div>
-
-    <!-- MAIN APP -->
     <div id="main-app" class="container hidden">
         <header>
             <div>
@@ -125,247 +127,311 @@
             </div>
 
             <div id="table-card">
-                <!-- PANEL INTEGRASI SALDO AWAL & SALDO AKHIR -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                    <div class="card" style="margin-bottom:0; padding: 15px;">
-                        <label style="color:#4f46e5; font-size:13px;">Input Saldo Awal</label>
-                        <input type="number" id="saldo-awal-idr" placeholder="IDR (Rp)" style="margin-bottom:8px; padding: 6px;">
-                        <input type="number" id="saldo-awal-usd" placeholder="USD ($)" style="padding: 6px;">
-                    </div>
-                    <div class="card" style="margin-bottom:0; padding: 15px; background-color:#fafafa;">
-                        <label style="color:#b91c1c; font-size:13px;">Saldo Akhir</label>
-                        <p id="saldo-akhir-display" style="font-size:15px; font-weight:bold; margin:12px 0 0 0; line-height:1.5; color:#111827;">
-                            IDR 0<br>USD 0
-                        </p>
-                    </div>
-                </div>
+<div class="summary-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+    
+    <!-- KOLOM 1: INPUT SALDO AWAL -->
+    <div class="card" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0;">
+        <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
+            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
+        </div>
+    </div>
 
-                <!-- BOX TOTAL PEMASUKAN & PENGELUARAN -->
-                <div class="summary-box">
-                    <div class="card-income">
-                        <label>Total Pemasukan</label>
-                        <p class="card-amount" id="total-income">Rp 0<br><span style="font-size:14px; font-weight:normal;">$ 0</span></p>
-                    </div>
-                    <div class="card-expense">
-                        <label>Total Pengeluaran</label>
-                        <p class="card-amount" id="total-expense">Rp 0<br><span style="font-size:14px; font-weight:normal;">$ 0</span></p>
-                    </div>
-                </div>
+    <!-- KOLOM 2: TOTAL PEMASUKAN -->
+    <div class="card-income" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <small id="income-label">Total Pemasukan</small>
+        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
+    </div>
 
-                <!-- TABEL DATA DATABASE -->
-                <div class="card" style="overflow-x: auto;">
-                    <h3 style="margin-top:0; color:#1f2937;">Riwayat Database</h3>
+    <!-- KOLOM 3: TOTAL PENGELUARAN -->
+    <div class="card-expense" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <small id="expense-label">Total Pengeluaran</small>
+        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
+    </div>
+
+    <!-- KOLOM 4: SALDO AKHIR -->
+    <div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0; display: flex; flex-direction: column; justify-content: center;">
+        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
+        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
+    </div>
+
+</div>
+
+    <!-- KOLOM 2: TOTAL PEMASUKAN -->
+    <div class="card-income">
+        <small id="income-label">Total Pemasukan</small>
+        <p id="total-income" class="card-amount">IDR 0<br>USD 0</p>
+    </div>
+
+    <!-- KOLOM 3: TOTAL PENGELUARAN -->
+    <div class="card-expense">
+        <small id="expense-label">Total Pengeluaran</small>
+        <p id="total-expense" class="card-amount">IDR 0<br>USD 0</p>
+    </div>
+
+    <!-- KOLOM 4: SALDO AKHIR (OTOMATIS) -->
+    <div class="card-income" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center;">
+        <small style="color: #374151; font-weight: 600;">Saldo Akhir</small>
+        <p id="total-ending" class="card-amount" style="color: #111827;">IDR 0<br>USD 0</p>
+    </div>
+</div>
+              
+                <div class="card" style="width: 100%;">
+                    <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
                     <table>
                         <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Kategori</th>
-                                <th>Keterangan</th>
-                                <th style="text-align: right;">Jumlah</th>
-                                <th style="text-align: center;">Aksi</th>
+                            <tr id="table-header-row">
+                                <th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th style="text-align: right;">Jumlah</th><th id="th-action" style="text-align: center;" class="hidden">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="transaction-list"></tbody>
                     </table>
                 </div>
+                <div class="card hidden" id="admin-control-card" style="width: 100%; border-top: 4px solid #b91c1c;">
+                    <h3 style="margin-top:0; margin-bottom:15px; color:#b91c1c;">⚙️ Admin Control Panel (Kelola Pengguna)</h3>
+                    <table>
+                        <thead><tr><th>Nama ID User</th><th>Kata Sandi</th><th style="text-align: center;">Tindakan</th></tr></thead>
+                        <tbody id="user-list-admin"></tbody>
+                    </table>
+                </div>
+                <div class="card hidden" id="admin-log-card" style="width: 100%; border-top: 4px solid #4f46e5;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin:0; color:#4f46e5;">📋 Log Activity (Histori Login Cloud)</h3>
+                        <button onclick="bersihkanSemuaLogCloud()" class="btn-delete" style="background-color:#4f46e5; padding: 6px 12px;">Reset Log</button>
+                    </div>
+                    <table>
+                        <thead><tr><th>ID Pengguna</th><th>Waktu Aktivitas</th><th>Status Sesi</th></tr></thead>
+                        <tbody id="log-list"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <!-- LOGIKA JAVASCRIPT PART 1 -->
     <script>
-        // VARIABLE DATABASE Google Apps Script ANDA (DIKEMBALIKAN UTUH)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTrHgNpyTeVu_DgvlAw4LOPgA4xp4_SkEmkS9b71-LJyG52kc1Sumed4euJ4B1AKPZOQ/exec";
-
-        const categories = {
-            "Pemasukan": ["Gaji", "Investasi", "Proyek", "Hibahan", "Lain-lain"],
-            "Pengeluaran": ["Makanan", "Transportasi", "Sewa Cloud", "Server", "Domain", "Gaji Tim", "Lain-lain"]
-        };
-
-        let currentUser = null;
-        let transactions = [];
-        let isSignUpMode = false;
 
         const authPage = document.getElementById('auth-page');
         const mainApp = document.getElementById('main-app');
-        const navTop = document.getElementById('nav-top-container');
         const authForm = document.getElementById('auth-form');
         const authTitle = document.getElementById('auth-title');
+        const btnAuth = document.getElementById('btn-auth');
         const authToggle = document.getElementById('auth-toggle');
+        const userDisplay = document.getElementById('user-display');
+        const form = document.getElementById('finance-form');
         const typeSelect = document.getElementById('type');
         const categorySelect = document.getElementById('category');
-        const financeForm = document.getElementById('finance-form');
+        const currencySelect = document.getElementById('currency');
+        const transactionList = document.getElementById('transaction-list');
+        const inputCard = document.getElementById('input-card');
+        const tableGrid = document.querySelector('.grid');
+        const btnSubmit = document.getElementById('btn-submit');
+        const adminLogCard = document.getElementById('admin-log-card');
+        const adminControlCard = document.getElementById('admin-control-card');
+        const userListAdmin = document.getElementById('user-list-admin');
+        const logList = document.getElementById('log-list');
+        const navTopContainer = document.getElementById('nav-top-container');
 
-        // Hubungkan event listener ketikan saldo awal ke fungsi hitung real-time
-        document.getElementById('saldo-awal-idr').addEventListener('input', renderData);
-        document.getElementById('saldo-awal-usd').addEventListener('input', renderData);
+        let isLoginMode = true;
+        let currentUser = null;
+        let cloudTransactions = [];
+
+        const categories = {
+            Pemasukan: ['Gaji', 'Bisnis', 'Lainnya'],
+            Pengeluaran: ['Makanan', 'Transportasi', 'Belanja', 'Tagihan', 'Lainnya']
+        };
+
+        const MASTER_ADMIN_ID = "admin";
+        const MASTER_ADMIN_PWD = "admin123";
 
         authToggle.addEventListener('click', () => {
-            isSignUpMode = !isSignUpMode;
-            authTitle.innerText = isSignUpMode ? "FZRCyber - Daftar Akun" : "FZRCyber - Masuk";
-            document.getElementById('btn-auth').innerText = isSignUpMode ? "Daftar Sekarang" : "Masuk Sekarang";
-            authToggle.innerText = isSignUpMode ? "Sudah punya akun? Masuk di sini" : "Belum punya akun? Daftar di sini";
+            isLoginMode = !isLoginMode;
+            authTitle.textContent = isLoginMode ? "FZRCyber - Masuk" : "FZRCyber - Buat Akun Baru";
+            btnAuth.textContent = isLoginMode ? "Masuk Sekarang" : "Daftar Akun";
+            authToggle.textContent = isLoginMode ? "Belum punya akun? Daftar di sini" : "Sudah punya akun? Masuk di sini";
         });
 
-        authForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('auth-username').value.trim();
-            const password = document.getElementById('auth-password').value;
-            let users = JSON.parse(localStorage.getItem('fzr_users')) || {};
+        function kirimLogLoginKeCloud(idUser) {
+            if(SCRIPT_URL === "" || SCRIPT_URL.includes("PASTIKAN")) return;
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "catat_login", id: 'log_' + Math.random().toString(36).substr(2, 9), userId: idUser }) });
+        }
 
-            if (isSignUpMode) {
-                if (users[username]) {
-                    alert('Nama pengguna sudah terdaftar!');
-                    return;
-                }
-                users[username] = password;
-                localStorage.setItem('fzr_users', JSON.stringify(users));
-                alert('Pendaftaran berhasil! Silakan masuk.');
-                authToggle.click();
+        authForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const username = document.getElementById('auth-username').value.trim().toLowerCase();
+            const password = String(document.getElementById('auth-password').value).trim();
+            btnAuth.disabled = true; btnAuth.textContent = "Proses...";
+
+            if (!isLoginMode) {
+                if (username === MASTER_ADMIN_ID) { alert("ID dilindungi!"); btnAuth.disabled = false; btnAuth.textContent = "Daftar Akun"; return; }
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "daftar_akun", username: username, password: password }) })
+                .then(res => res.json()).then(res => {
+                    btnAuth.disabled = false; btnAuth.textContent = "Daftar Akun";
+                    if (res.status === 'exists') { alert("ID sudah terdaftar!"); } 
+                    else { alert("Sukses mendaftar cloud! Silakan Masuk."); isLoginMode = true; authToggle.click(); }
+                }).catch(() => { btnAuth.disabled = false; alert("Gagal terhubung server!"); });
             } else {
-                if (users[username] && users[username] === password) {
-                    currentUser = username;
-                    masukAplikasi();
-                } else {
-                    alert('Nama pengguna atau kata sandi salah!');
+                if (username === MASTER_ADMIN_ID && password === MASTER_ADMIN_PWD) { eksekusiLoginMasuk(username); } 
+                else {
+                    fetch(SCRIPT_URL + "?req=auth").then(res => res.json()).then(usersCloud => {
+                        btnAuth.disabled = false; btnAuth.textContent = "Masuk Sekarang";
+                        let matchFound = false;
+                        for (let key in usersCloud) {
+                            if (key.trim().toLowerCase() === username && String(usersCloud[key]).trim() === password) { matchFound = true; break; }
+                        }
+                        if (matchFound) { eksekusiLoginMasuk(username); } 
+                        else { alert("ID atau Password salah!"); }
+                    }).catch(() => { btnAuth.disabled = false; alert("Gagal verifikasi!"); });
                 }
             }
         });
-
-        function masukAplikasi() {
-            authPage.classList.add('hidden');
-            mainApp.classList.remove('hidden');
-            navTop.classList.remove('hidden');
-            document.getElementById('user-display').innerHTML = `Login sebagai ID: <strong>${currentUser}</strong>`;
-            document.getElementById('date').value = new Date().toISOString().split('T');
-            updateCategoryOptions();
-            loadTransactions();
+        function eksekusiLoginMasuk(username) {
+            currentUser = username;
+            sessionStorage.setItem("fz_active_user", username);
+            authPage.classList.add('hidden'); mainApp.classList.remove('hidden');
+            navTopContainer.classList.remove('hidden');
+            kirimLogLoginKeCloud(currentUser);
+            aturTampilanDashboard();
+            ambilDataDariCloud();
         }
 
-        function keluarAkun() {
-            currentUser = null;
-            transactions = [];
-            authForm.reset();
-            document.getElementById('saldo-awal-idr').value = '';
-            document.getElementById('saldo-awal-usd').value = '';
-            authPage.classList.remove('hidden');
-            mainApp.classList.add('hidden');
-            navTop.classList.add('hidden');
+        function aturTampilanDashboard() {
+            if (currentUser === MASTER_ADMIN_ID) {
+                userDisplay.innerHTML = "Login sebagai: <strong>MASTER ADMIN</strong>";
+                inputCard.style.display = 'none'; tableGrid.style.gridTemplateColumns = '1fr';
+                document.getElementById('th-action').classList.remove('hidden'); 
+                adminLogCard.classList.remove('hidden'); adminControlCard.classList.remove('hidden');
+            } else {
+                userDisplay.textContent = "Login sebagai ID: " + currentUser; inputCard.style.display = 'block';
+                if(window.innerWidth >= 768) tableGrid.style.gridTemplateColumns = '350px 1fr';
+                document.getElementById('th-action').classList.add('hidden'); 
+                adminLogCard.classList.add('hidden'); adminControlCard.classList.add('hidden');
+            }
         }
 
-        function updateCategoryOptions() {
-            const selectedType = typeSelect.value;
+        function keluarAkun() { 
+            currentUser = null; sessionStorage.removeItem("fz_active_user");
+            authPage.classList.remove('hidden'); mainApp.classList.add('hidden'); navTopContainer.classList.add('hidden');
+        }
+
+        function updateCategories() {
             categorySelect.innerHTML = '';
-            categories[selectedType].forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.innerText = cat;
-                categorySelect.appendChild(opt);
+            categories[typeSelect.value].forEach(c => {
+                let o = document.createElement('option'); o.value = c; o.textContent = c; categorySelect.appendChild(o);
             });
         }
-        typeSelect.addEventListener('change', updateCategoryOptions);
-        // LOGIKA JAVASCRIPT PART 2
-        financeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const transaction = {
-                id: Date.now(),
-                type: typeSelect.value,
-                category: categorySelect.value,
-                date: document.getElementById('date').value,
-                currency: document.getElementById('currency').value,
-                amount: parseFloat(document.getElementById('amount').value),
-                description: document.getElementById('description').value
+        typeSelect.addEventListener('change', updateCategories);
+        document.getElementById('date').valueAsDate = new Date(); updateCategories();
+
+        function ambilDataDariCloud() {
+            if(SCRIPT_URL === "") return;
+            fetch(SCRIPT_URL).then(res => res.json()).then(data => { 
+                cloudTransactions = data; tampilkanTabel(); 
+                if (currentUser === MASTER_ADMIN_ID) { ambilLogDariCloud(); muatDaftarPenggunaKeAdmin(); } 
+            });
+        }
+
+        function muatDaftarPenggunaKeAdmin() {
+            fetch(SCRIPT_URL + "?req=auth").then(res => res.json()).then(users => {
+                userListAdmin.innerHTML = ''; let ketersediaanUser = false;
+                for (let username in users) {
+                    ketersediaanUser = true; let row = document.createElement('tr');
+                    row.innerHTML = `<td><strong>${username}</strong></td><td>••••••</td><td style="text-align: center;"><button class="btn-delete" onclick="hapusAkunUserCloud('${username}')">Hapus Akun</button></td>`;
+                    userListAdmin.appendChild(row);
+                }
+                if(!ketersediaanUser) userListAdmin.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #9ca3af; padding: 15px;">Belum ada user mendaftar.</td></tr>`;
+            });
+        }
+
+        function hapusAkunUserCloud(namaUser) {
+            if (confirm(`Hapus akun "${namaUser}"?`)) {
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "hapus_akun", username: namaUser }) }).then(() => { ambilDataDariCloud(); });
+            }
+        }
+
+        function bersihkanSemuaLogCloud() {
+            if (confirm("Bersihkan semua histori log activity?")) {
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "bersihkan_log" }) }).then(() => { ambilLogDariCloud(); });
+            }
+        }
+        function ambilLogDariCloud() {
+            fetch(SCRIPT_URL + "?req=log").then(res => res.json()).then(logs => {
+                logList.innerHTML = '';
+                if(!logs || logs.length === 0) { logList.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada riwayat aktivitas login.</td></tr>`; return; }
+                [...logs].reverse().forEach(l => {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `<td><strong>${l.userId}</strong></td><td>${l.waktuLogin}</td><td><span class="admin-badge" style="background-color:#059669;">Berhasil Masuk</span></td>`;
+                    logList.appendChild(row);
+                });
+            });
+        }
+
+        function bersihkanTanggal(rawDate) {
+            if (!rawDate) return "";
+            try {
+                let textStr = String(rawDate); if (textStr.includes('T')) textStr = textStr.split('T');
+                let parts = textStr.split('-'); if(parts.length === 3) return `${parts}/${parts}/${parts}`;
+                return textStr.substring(0, 10);
+            } catch(e) { return String(rawDate).substring(0, 10); }
+        }
+
+        function formatUang(nilai, jenisMataUang) {
+            let angka = parseFloat(nilai) || 0;
+            if (jenisMataUang === "USD") return "$ " + angka.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            return "Rp " + parseInt(angka).toLocaleString('id-ID');
+        }
+
+        function tampilkanTabel() {
+            let incomeIDR = 0, incomeUSD = 0; let expenseIDR = 0, expenseUSD = 0; transactionList.innerHTML = '';
+            let filtered = currentUser === MASTER_ADMIN_ID ? [...cloudTransactions] : cloudTransactions.filter(t => t.userId === currentUser);
+            
+            if (currentUser === MASTER_ADMIN_ID && !document.getElementById('th-user-id')) {
+                let th = document.createElement('th'); th.id = 'th-user-id'; th.textContent = "ID User"; document.getElementById('table-header-row').insertBefore(th, document.getElementById('table-header-row').firstChild);
+            } else if (currentUser !== MASTER_ADMIN_ID && document.getElementById('th-user-id')) { document.getElementById('th-user-id').remove(); }
+
+            if(filtered.length === 0) {
+                let cols = currentUser === MASTER_ADMIN_ID ? 5 : 4; transactionList.innerHTML = `<tr><td colspan="${cols}" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada data transaksi.</td></tr>`;
+            } else {
+                filtered.forEach(t => {
+                    let isPem = t.type === 'Pemasukan'; let cur = t.mataUang === "USD" ? "USD" : "IDR"; let nilai = parseFloat(t.amount) || 0;
+                    if (isPem) { if (cur === "USD") incomeUSD += nilai; else incomeIDR += nilai; } else { if (cur === "USD") expenseUSD += nilai; else expenseIDR += nilai; }
+                    let r = document.createElement('tr');
+                    let userCol = currentUser === MASTER_ADMIN_ID ? `<td><span class="admin-badge">${t.userId}</span></td>` : '';
+                    let actionCol = currentUser === MASTER_ADMIN_ID ? `<td style="text-align: center;"><button class="btn-delete" onclick="dropCloud('${t.id}')">Hapus</button></td>` : '';
+                    r.innerHTML = `${userCol}<td>${bersihkanTanggal(t.date)}</td><td>${t.category}</td><td>${t.description}</td><td class="${isPem ? 'text-income' : 'text-expense'}">${isPem ? '+' : '-'} ${formatUang(nilai, cur)}</td>${actionCol}`;
+                    transactionList.appendChild(r);
+                });
+            }
+            document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
+            document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
+        }
+
+        form.addEventListener('submit', e => {
+            e.preventDefault(); btnSubmit.disabled = true; btnSubmit.textContent = "Menyimpan...";
+            const payload = {
+                action: "simpan", id: 'trx_' + Math.random().toString(36).substr(2, 9), userId: currentUser,
+                date: document.getElementById('date').value, type: typeSelect.value, category: categorySelect.value,
+                description: document.getElementById('description').value, amount: document.getElementById('amount').value, mataUang: currencySelect.value
             };
-            transactions.push(transaction);
-            saveTransactions();
-            renderData();
-            document.getElementById('amount').value = '';
-            document.getElementById('description').value = '';
+            fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+            .then(res => res.json()).then(() => {
+                btnSubmit.disabled = false; btnSubmit.textContent = "Simpan Transaksi";
+                document.getElementById('amount').value = ''; document.getElementById('description').value = ''; ambilDataDariCloud();
+            }).catch(() => { btnSubmit.disabled = false; btnSubmit.textContent = "Simpan Transaksi"; alert("Gagal!"); });
         });
 
-        function loadTransactions() {
-            const saved = localStorage.getItem(`fzr_tx_${currentUser}`);
-            transactions = saved ? JSON.parse(saved) : [];
-            renderData();
-        }
-
-        function saveTransactions() {
-            localStorage.setItem(`fzr_tx_${currentUser}`, JSON.stringify(transactions));
-        }
-
-        function hapusTransaksi(id) {
-            if (confirm('Hapus transaksi ini?')) {
-                transactions = transactions.filter(tx => tx.id !== id);
-                saveTransactions();
-                renderData();
+        window.dropCloud = function(idTransaksi) {
+            if (confirm("Hapus data histori ini secara permanen dari cloud?")) {
+                fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "hapus", id: idTransaksi }) }).then(() => { ambilDataDariCloud(); });
             }
         }
 
-        function formatCurrency(val, currency) {
-            if (currency === 'IDR') {
-                return 'Rp ' + val.toLocaleString('id-ID');
-            } else {
-                return '$ ' + val.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 4 });
-            }
-        }
-
-        // FUNGSI UTAMA PEMROSES DATA & HITUNG SALDO AKHIR REAL-TIME
-        function renderData() {
-            const listContainer = document.getElementById('transaction-list');
-            if (listContainer) listContainer.innerHTML = '';
-
-            let totals = { IDR: { Pemasukan: 0, Pengeluaran: 0 }, USD: { Pemasukan: 0, Pengeluaran: 0 } };
-            transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            transactions.forEach(tx => {
-                totals[tx.currency][tx.type] += tx.amount;
-
-                if (listContainer) {
-                    const tr = document.createElement('tr');
-                    const cleanDesc = tx.description.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                    const styleClass = tx.type === 'Pemasukan' ? 'text-income' : 'text-expense';
-                    const prefix = tx.type === 'Pemasukan' ? '+' : '-';
-
-                    // Ditulis pendek ke bawah agar baris kode dijamin aman dari terpotong sistem
-                    tr.innerHTML = "<td>" + tx.date + "</td>" +
-                                   "<td>" + tx.category + "</td>" +
-                                   "<td>" + cleanDesc + "</td>" +
-                                   "<td class='" + styleClass + "'>" + prefix + " " + formatCurrency(tx.amount, tx.currency) + "</td>" +
-                                   "<td style='text-align: center;'>" +
-                                   "<button onclick='hapusTransaksi(" + tx.id + ")' class='btn-delete'>Hapus</button>" +
-                                   "</td>";
-                    
-                    listContainer.appendChild(tr);
-                }
-            });
-
-            if (transactions.length === 0 && listContainer) {
-                listContainer.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">Belum ada data.</td></tr>`;
-            }
-
-            // 1. Dapatkan nilai angka dari kolom input Saldo Awal (jika kosong default ke nilai 0)
-            const saldoAwalIDR = parseFloat(document.getElementById('saldo-awal-idr').value) || 0;
-            const saldoAwalUSD = parseFloat(document.getElementById('saldo-awal-usd').value) || 0;
-
-            // 2. Operasi Rumus Kalkulasi Matematika Saldo Akhir Global
-            const saldoAkhirIDR = saldoAwalIDR + totals.IDR.Pemasukan - totals.IDR.Pengeluaran;
-            const saldoAkhirUSD = saldoAwalUSD + totals.USD.Pemasukan - totals.USD.Pengeluaran;
-
-            // 3. Render pembaruan teks akumulasi kas ke panel dasbor atas
-            document.getElementById('total-income').innerHTML = 
-                formatCurrency(totals.IDR.Pemasukan, 'IDR') + "<br>" +
-                "<span style='font-size:14px; font-weight:normal; color:#4b5563;'>" + 
-                formatCurrency(totals.USD.Pemasukan, 'USD') + "</span>";
-
-            document.getElementById('total-expense').innerHTML = 
-                formatCurrency(totals.IDR.Pengeluaran, 'IDR') + "<br>" +
-                "<span style='font-size:14px; font-weight:normal; color:#4b5563;'>" + 
-                formatCurrency(totals.USD.Pengeluaran, 'USD') + "</span>";
-
-            // 4. Masukkan hasil kalkulasi ke dalam komponen teks Saldo Akhir secara Real-time
-            document.getElementById('saldo-akhir-display').innerHTML = 
-                "IDR " + saldoAkhirIDR.toLocaleString('id-ID') + "<br>" +
-                "USD " + saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-        }
+        window.addEventListener("load", () => {
+            let savedUser = sessionStorage.getItem("fz_active_user");
+            if (savedUser) { currentUser = savedUser; authPage.classList.add('hidden'); mainApp.classList.remove('hidden'); navTopContainer.classList.remove('hidden'); aturTampilanDashboard(); ambilDataDariCloud(); }
+        });
     </script>
 </body>
 </html>
+
+
