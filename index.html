@@ -243,6 +243,91 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", () => 
 // Jalankan otomatis saat halaman selesai dimuat (baik di PC maupun HP)
 window.addEventListener("DOMContentLoaded", muatSaldoDariCloud);
 </script>
+				<!-- JAVASCRIPT OTOMATISASI AMAN (TIDAK MERUSAK LOGIN / NO LOGOUT) -->
+<script>
+// 1. Fungsi Mengambil Data dari Database saat Halaman Dibuka (PC/HP)
+async function muatSaldoAwalDariDatabase() {
+    try {
+        // Menggunakan fetch ke API backend Anda (tidak mengganggu localStorage login)
+        let response = await fetch('/api/get-saldo-awal'); 
+        if (response.ok) {
+            let data = await response.json();
+            document.getElementById("input-saldo-awal-idr").value = data.saldo_idr || 0;
+            document.getElementById("input-saldo-awal-usd").value = data.saldo_usd || 0;
+            hitungSaldoAkhir();
+        }
+    } catch (error) {
+        console.error("Gagal mengambil data dari database:", error);
+    }
+}
+
+// 2. Fungsi Menyimpan Data ke Database saat Selesai Mengetik
+let timeoutSimpan;
+function simpanSaldoKeDatabase() {
+    clearTimeout(timeoutSimpan);
+    timeoutSimpan = setTimeout(async () => {
+        let saldoIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+        let saldoUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+
+        try {
+            await fetch('/api/save-saldo-awal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ saldo_idr: saldoIDR, saldo_usd: saldoUSD })
+            });
+            console.log("Saldo awal berhasil disinkronkan ke database server.");
+        } catch (error) {
+            console.error("Gagal sinkronisasi ke database:", error);
+        }
+    }, 500);
+}
+
+// 3. Fungsi Hitung Saldo Akhir Komputer Lokal
+function hitungSaldoAkhir() {
+    let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+    let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+
+    let teksPemasukan = document.getElementById("total-income").innerHTML;
+    let teksPengeluaran = document.getElementById("total-expense").innerHTML;
+
+    function ekstrakNilai(teks) {
+        let bagian = teks.split(/<br\s*\/?>/i);
+        let idr = bagian[0] ? parseFloat(bagian[0].replace(/[^0-9.-]+/g, "")) : 0;
+        let usd = bagian[1] ? parseFloat(bagian[1].replace(/[^0-9.-]+/g, "")) : 0;
+        return { idr: isNaN(idr) ? 0 : idr, usd: isNaN(usd) ? 0 : usd };
+    }
+
+    let pemasukan = ekstrakNilai(teksPemasukan);
+    let pengeluaran = ekstrakNilai(teksPengeluaran);
+
+    let totalIDR = saldoAwalIDR + pemasukan.idr - pengeluaran.idr;
+    let totalUSD = saldoAwalUSD + pemasukan.usd - pengeluaran.usd;
+
+    document.getElementById("total-ending").innerHTML = 
+        `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
+}
+
+// Pasang Event Listener Ketikan
+document.getElementById("input-saldo-awal-idr").addEventListener("input", () => {
+    hitungSaldoAkhir();
+    simpanSaldoKeDatabase();
+});
+document.getElementById("input-saldo-awal-usd").addEventListener("input", () => {
+    hitungSaldoAkhir();
+    simpanSaldoKeDatabase();
+});
+
+// Jalankan pengambilan data cloud saat halaman dibuka tanpa menyentuh session login
+window.addEventListener("DOMContentLoaded", () => {
+    muatSaldoAwalDariDatabase();
+    
+    // Jika Anda punya fungsi cek login bawaan (misal: cekLoginSession()), jalankan di sini:
+    if (typeof cekLoginSession === "function") {
+        cekLoginSession();
+    }
+});
+</script>
+
 
 
   
