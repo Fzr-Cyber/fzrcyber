@@ -430,30 +430,6 @@
             let savedUser = sessionStorage.getItem("fz_active_user");
             if (savedUser) { currentUser = savedUser; authPage.classList.add('hidden'); mainApp.classList.remove('hidden'); navTopContainer.classList.remove('hidden'); aturTampilanDashboard(); ambilDataDariCloud(); }
         });
-   // 1. Dapatkan nilai angka dari kolom input Saldo Awal (jika kosong default ke nilai 0)
-            const saldoAwalIDR = parseFloat(document.getElementById('saldo-awal-idr').value) || 0;
-            const saldoAwalUSD = parseFloat(document.getElementById('saldo-awal-usd').value) || 0;
-
-            // 2. Operasi Rumus Kalkulasi Matematika Saldo Akhir Global
-            const saldoAkhirIDR = saldoAwalIDR + totals.IDR.Pemasukan - totals.IDR.Pengeluaran;
-            const saldoAkhirUSD = saldoAwalUSD + totals.USD.Pemasukan - totals.USD.Pengeluaran;
-
-            // 3. Render pembaruan teks akumulasi kas ke panel dasbor atas
-            document.getElementById('total-income').innerHTML = 
-                formatCurrency(totals.IDR.Pemasukan, 'IDR') + "<br>" +
-                "<span style='font-size:14px; font-weight:normal; color:#4b5563;'>" + 
-                formatCurrency(totals.USD.Pemasukan, 'USD') + "</span>";
-
-            document.getElementById('total-expense').innerHTML = 
-                formatCurrency(totals.IDR.Pengeluaran, 'IDR') + "<br>" +
-                "<span style='font-size:14px; font-weight:normal; color:#4b5563;'>" + 
-                formatCurrency(totals.USD.Pengeluaran, 'USD') + "</span>";
-
-            // 4. Masukkan hasil kalkulasi ke dalam komponen teks Saldo Akhir secara Real-time
-            document.getElementById('saldo-akhir-display').innerHTML = 
-                "IDR " + saldoAkhirIDR.toLocaleString('id-ID') + "<br>" +
-                "USD " + saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-        }
     </script>
 </body>
 </html>
