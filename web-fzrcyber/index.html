@@ -386,6 +386,7 @@
         });
 <!-- KODE REVISI MUTLAK - AUTOMATIC CLOUD SINKRONISASI -->
 <script>
+<script>
 function dapatkanUserAktif() {
     if (typeof currentUser !== 'undefined' && currentUser) {
         return currentUser.toString().trim();
@@ -399,58 +400,15 @@ function dapatkanUserAktif() {
 
 async function muatSaldoDariDatabaseServer() {
     try {
-        let username = dapatkanUserAktif();
         let response = await fetch("https://google.com"); 
         if (response.ok) {
             let listTransaksi = await response.json();
-            
-            // Cari data saldo awal dari baris transaksi
-            let dataIDR = listTransaksi.find(t => t.category === "Saldo Awal" && t.mataUang === "IDR" && t.userId === username);
-            let dataUSD = listTransaksi.find(t => t.category === "Saldo Awal" && t.mataUang === "USD" && t.userId === username);
-
-            // Masukkan angkanya langsung ke dalam kotak input saldo awal Anda
-            if (dataIDR && dataIDR.amount !== undefined) document.getElementById("input-saldo-awal-idr").value = dataIDR.amount;
-            if (dataUSD && dataUSD.amount !== undefined) document.getElementById("input-saldo-awal-usd").value = dataUSD.amount;
-            
             hitungSaldoAkhir(listTransaksi);
         }
     } catch (error) { console.error(error); }
 }
 
-let timeoutSimpanCloud;
-function simpanSaldoKeDatabaseServer(jenisMataUang, nominalAngka) {
-    clearTimeout(timeoutSimpanCloud);
-    timeoutSimpanCloud = setTimeout(async () => {
-        let username = dapatkanUserAktif();
-        try {
-            await fetch("https://google.com", {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' }, 
-                body: JSON.stringify({ 
-                    action: "simpan",
-                    id: "SALDO_" + username + "_" + jenisMataUang,
-                    userId: username,
-                    date: new Date().toISOString().split('T')[0],
-                    type: "Pemasukan",
-                    category: "Saldo Awal",
-                    description: "Sinkronisasi otomatis saldo awal",
-                    amount: nominalAngka,
-                    mataUang: jenisMataUang
-                })
-            });
-            console.log("Sukses kunci saldo!");
-        } catch (error) { console.error(error); }
-    }, 1000);
-}
-
 function hitungSaldoAkhir(listTransaksi) {
-    let inputIDR = document.getElementById("input-saldo-awal-idr");
-    let inputUSD = document.getElementById("input-saldo-awal-usd");
-    if (!inputIDR || !inputUSD) return;
-
-    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
-    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
-
     let totalPemasukanIDR = 0, totalPemasukanUSD = 0;
     let totalPengeluaranIDR = 0, totalPengeluaranUSD = 0;
 
@@ -458,7 +416,7 @@ function hitungSaldoAkhir(listTransaksi) {
     if (listTransaksi && Array.isArray(listTransaksi)) {
         let username = dapatkanUserAktif();
         listTransaksi.forEach(t => {
-            if (t.userId === username && t.category !== "Saldo Awal") { // Lewati kategori Saldo Awal agar tidak double hitung
+            if (t.userId === username) { 
                 let amount = parseFloat(t.amount) || 0;
                 if (t.type === "Pemasukan") {
                     if (t.mataUang === "IDR") totalPemasukanIDR += amount;
@@ -471,44 +429,24 @@ function hitungSaldoAkhir(listTransaksi) {
         });
     }
 
-    // Tampilkan hasil bersih ke kotak Total Pemasukan dan Pengeluaran Anda di layar
+    // Tampilkan hasil bersih ke kotak Total Pemasukan dan Pengeluaran di layar
     let htmlPemasukan = `Rp ${totalPemasukanIDR.toLocaleString('id-ID')}<br>$ ${totalPemasukanUSD.toLocaleString('en-US')}`;
     let htmlPengeluaran = `Rp ${totalPengeluaranIDR.toLocaleString('id-ID')}<br>$ ${totalPengeluaranUSD.toLocaleString('en-US')}`;
     
     if(document.getElementById("total-income")) document.getElementById("total-income").innerHTML = htmlPemasukan;
     if(document.getElementById("total-expense")) document.getElementById("total-expense").innerHTML = htmlPengeluaran;
 
-    // Rumus Matematika Akhir yang Akurat 100%
-    let totalIDR = saldoAwalIDR + totalPemasukanIDR - totalPengeluaranIDR;
-    let totalUSD = saldoAwalUSD + totalPemasukanUSD - totalPengeluaranUSD;
+    // Rumus Matematika Akhir murni dari selisih transaksi (Tanpa Saldo Awal)
+    let totalIDR = totalPemasukanIDR - totalPengeluaranIDR;
+    let totalUSD = totalPemasukanUSD - totalPengeluaranUSD;
 
     document.getElementById("total-ending").innerHTML = 
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    let inputIDR = document.getElementById("input-saldo-awal-idr");
-    let inputUSD = document.getElementById("input-saldo-awal-usd");
-    
-    if(inputIDR && inputUSD) {
-        // Ambil data dari server cloud database Google Sheets Anda saat halaman dibuka (Aman untuk PC & HP)
-        muatSaldoDariDatabaseServer();
-
-        inputIDR.addEventListener("input", function() { 
-            let nominal = parseFloat(this.value) || 0;
-            // Ambil data transaksi tiruan untuk re-kalkulasi instan di layar
-            let dataTrx = typeof listTransaksi !== 'undefined' ? listTransaksi : [];
-            hitungSaldoAkhir(dataTrx); 
-            simpanSaldoKeDatabaseServer("IDR", nominal); 
-        });
-        
-        inputUSD.addEventListener("input", function() { 
-            let nominal = parseFloat(this.value) || 0;
-            let dataTrx = typeof listTransaksi !== 'undefined' ? listTransaksi : [];
-            hitungSaldoAkhir(dataTrx); 
-            simpanSaldoKeDatabaseServer("USD", nominal); 
-        });
-    }
+    // Jalankan kalkulasi bersih dari database cloud saat halaman terbuka
+    muatSaldoDariDatabaseServer();
 });
 </script>
 </body>
