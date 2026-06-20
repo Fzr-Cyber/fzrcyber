@@ -374,43 +374,30 @@ function keluarAkun() {
                 "IDR " + saldoAkhirIDR.toLocaleString('id-ID') + "<br>" +
                 "USD " + saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
-        // ========================================================
-        // LOGIKA PENYELAMAT SESI LOGIN (ANTI-LOGOUT SAAT REFRESH)
+            // ========================================================
+        // FIX: SIMPAN SESI SAAT SELESAI LOGIN (ANTI-LOGOUT REFRESH)
         // ========================================================
         
-        // 1. Fungsi Pencegat Sesi Saat Login Berhasil
-        const backupMasukAplikasi = masukAplikasi;
-        masukAplikasi = function() {
-            if (currentUser) {
-                localStorage.setItem('fzr_saved_user', currentUser);
-            }
-            backupMasukAplikasi();
-        };
-
-        // 2. Fungsi Penghapus Sesi Saat Klik Keluar Akun
-        const backupKeluarAkun = keluarAkun;
-        keluarAkun = function() {
-            localStorage.removeItem('fzr_saved_user');
-            backupKeluarAkun();
-        };
-
-        // 3. Eksekusi Pengecekan Sesi Otomatis dengan Jeda Stabilizer Browser
+        // Cek otomatis setiap halaman dibuka atau di-refresh
         window.addEventListener('load', () => {
-            const checkUser = localStorage.getItem('fzr_saved_user');
-            if (checkUser) {
-                currentUser = checkUser;
-                
-                // Pastikan class 'hidden' dilepas secara manual agar dashboard langsung muncul
-                const authPage = document.getElementById('auth-page');
-                const mainApp = document.getElementById('main-app');
-                const navTop = document.getElementById('nav-top-container');
-                
-                if (authPage) authPage.classList.add('hidden');
-                if (mainApp) mainApp.classList.remove('hidden');
-                if (navTop) navTop.classList.remove('hidden');
-                
-                // Panggil fungsi pemuat data database internal Anda
+            const savedUser = localStorage.getItem('fzr_active_user');
+            if (savedUser) {
+                currentUser = savedUser;
                 masukAplikasi();
             }
         });
+
+        // Simpan nama akun ke browser saat form login disubmit dengan benar
+        document.getElementById('auth-form').addEventListener('submit', () => {
+            const inputUser = document.getElementById('auth-username').value.trim();
+            if (inputUser) {
+                localStorage.setItem('fzr_active_user', inputUser);
+            }
+        });
+
+        // Hapus nama akun dari browser saat tombol keluar diklik
+        document.querySelector('.btn-logout').addEventListener('click', () => {
+            localStorage.removeItem('fzr_active_user');
+        });
+
 
