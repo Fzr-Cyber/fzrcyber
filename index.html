@@ -157,18 +157,54 @@
 
 </div> <!-- PENUTUP KONTANER UTAMA -->
 
-<!-- JAVASCRIPT OTOMATISASI DENGAN PENYIMPANAN LOCALSTORAGE -->
+localStorage, melainkan mengirimkan data (POST/PUT) ke server backend Anda saat pengguna selesai mengetik, dan mengambil data (GET) saat halaman dimuat.Silakan ganti skrip lama Anda dengan logika integrasi database berikut (Sesuaikan URL /api/... dengan rute backend asli Anda):html<!-- JAVASCRIPT INTEGRASI DATABASE (SINKRON PC & HP) -->
 <script>
+// Fungsi untuk mengambil data saldo awal dari database saat halaman dibuka
+async function muatSaldoAwalDariDatabase() {
+    try {
+        // Ganti URL ini dengan endpoint API backend Anda untuk mengambil data
+        let response = await fetch('/api/get-saldo-awal'); 
+        if (response.ok) {
+            let data = await response.json();
+            
+            // Masukkan data dari database ke kolom input
+            document.getElementById("input-saldo-awal-idr").value = data.saldo_idr || 0;
+            document.getElementById("input-saldo-awal-usd").value = data.saldo_usd || 0;
+            
+            // Hitung ulang tampilan saldo akhir
+            hitungSaldoAkhir();
+        }
+    } catch (error) {
+        console.error("Gagal mengambil data dari database:", error);
+    }
+}
+
+// Fungsi untuk menyimpan data ke database saat pengguna mengubah nilai input
+let timeoutSimpan;
+function simpanSaldoKeDatabase() {
+    // Debounce: Menunggu user selesai mengetik (500ms) baru dikirim ke server agar tidak membebani database
+    clearTimeout(timeoutSimpan);
+    timeoutSimpan = setTimeout(async () => {
+        let saldoIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+        let saldoUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+
+        try {
+            // Ganti URL ini dengan endpoint API backend Anda untuk menyimpan data
+            await fetch('/api/save-saldo-awal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ saldo_idr: saldoIDR, saldo_usd: saldoUSD })
+            });
+            console.log("Saldo awal berhasil disinkronkan ke database.");
+        } catch (error) {
+            console.error("Gagal sinkronisasi ke database:", error);
+        }
+    }, 500);
+}
+
 function hitungSaldoAkhir() {
-    let inputIDR = document.getElementById("input-saldo-awal-idr");
-    let inputUSD = document.getElementById("input-saldo-awal-usd");
-
-    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
-    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
-
-    // SIMPAN DATA: Menyimpan nilai yang diinput ke memori browser
-    localStorage.setItem("saldoAwalIDR", inputIDR.value);
-    localStorage.setItem("saldoAwalUSD", inputUSD.value);
+    let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+    let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
 
     let teksPemasukan = document.getElementById("total-income").innerHTML;
     let teksPengeluaran = document.getElementById("total-expense").innerHTML;
@@ -190,24 +226,20 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
-// MEMUAT DATA KEMBALI SAAT REFRESH
-window.addEventListener("DOMContentLoaded", function() {
-    // Ambil data yang tersimpan di memori browser (jika ada)
-    let simpananIDR = localStorage.getItem("saldoAwalIDR");
-    let simpananUSD = localStorage.getItem("saldoAwalUSD");
-
-    // Masukkan kembali angka yang tersimpan ke dalam kolom input
-    if (simpananIDR !== null) document.getElementById("input-saldo-awal-idr").value = simpananIDR;
-    if (simpananUSD !== null) document.getElementById("input-saldo-awal-usd").value = simpananUSD;
-
-    // Jalankan kalkulasi angka awal
+// Event listener saat user mengetik: Hitung lokal + kirim ke database
+document.getElementById("input-saldo-awal-idr").addEventListener("input", () => {
     hitungSaldoAkhir();
+    simpanSaldoKeDatabase();
+});
+document.getElementById("input-saldo-awal-usd").addEventListener("input", () => {
+    hitungSaldoAkhir();
+    simpanSaldoKeDatabase();
 });
 
-// Event listener untuk mendeteksi ketikan user
-document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
-document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
+// Saat halaman dibuka (baik di PC / HP), langsung ambil data terbaru dari cloud database
+window.addEventListener("DOMContentLoaded", muatSaldoAwalDariDatabase);
 </script>
+
 
               
                 <div class="card" style="width: 100%;">
