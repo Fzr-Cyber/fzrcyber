@@ -159,19 +159,25 @@
 
 </div> <!-- PENUTUP KONTANER UTAMA -->
 
-<!-- JAVASCRIPT OTOMATISASI -->
 <script>
 function hitungSaldoAkhir() {
-    let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
-    let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+    let inputIDR = document.getElementById("input-saldo-awal-idr");
+    let inputUSD = document.getElementById("input-saldo-awal-usd");
+
+    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
+    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
+
+    // SIMPAN DATA: Mengunci nilai input ke memori browser agar tidak hilang saat refresh
+    localStorage.setItem("app_saldoAwalIDR", inputIDR.value);
+    localStorage.setItem("app_saldoAwalUSD", inputUSD.value);
 
     let teksPemasukan = document.getElementById("total-income").innerHTML;
     let teksPengeluaran = document.getElementById("total-expense").innerHTML;
 
     function ekstrakNilai(teks) {
         let bagian = teks.split(/<br\s*\/?>/i);
-        let idr = bagian[0] ? parseFloat(bagian[0].replace(/[^0-9.-]+/g, "")) : 0;
-        let usd = bagian[1] ? parseFloat(bagian[1].replace(/[^0-9.-]+/g, "")) : 0;
+        let idr = bagian ? parseFloat(bagian[0].replace(/[^0-9.-]+/g, "")) : 0;
+        let usd = bagian && bagian[1] ? parseFloat(bagian[1].replace(/[^0-9.-]+/g, "")) : 0;
         return { idr: isNaN(idr) ? 0 : idr, usd: isNaN(usd) ? 0 : usd };
     }
 
@@ -185,9 +191,27 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
+// MEMUAT DATA KEMBALI SECARA OTOMATIS SAAT REFRESH
+window.addEventListener("DOMContentLoaded", function() {
+    // Mengambil data simpanan khusus saldo awal
+    let simpananIDR = localStorage.getItem("app_saldoAwalIDR");
+    let simpananUSD = localStorage.getItem("app_saldoAwalUSD");
+
+    if (simpananIDR !== null) document.getElementById("input-saldo-awal-idr").value = simpananIDR;
+    if (simpananUSD !== null) document.getElementById("input-saldo-awal-usd").value = simpananUSD;
+
+    // Hitung kalkulasi angka display
+    hitungSaldoAkhir();
+    
+    // PENTING: Jika Anda memiliki fungsi bawaan pengecekan login admin, jalankan di bawah ini agar tidak logout:
+    if (typeof cekLoginSession === "function") {
+        cekLoginSession();
+    }
+});
+
+// Jalankan kalkulator real-time setiap kali user mengetik angka baru
 document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
 document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
-window.addEventListener("DOMContentLoaded", hitungSaldoAkhir);
 </script>
 
   
