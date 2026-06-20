@@ -127,7 +127,8 @@
 
             <div id="table-card">
 <div class="summary-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-  <div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
+<!-- KONTANER UTAMA AGAR SEBARIS KE SAMPING -->
+<div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
 
     <!-- KOLOM 1: INPUT SALDO AWAL -->
     <div class="card" style="flex: 1; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
@@ -158,18 +159,11 @@
 
 </div> <!-- PENUTUP KONTANER UTAMA -->
 
-<!-- JAVASCRIPT OTOMATISASI DENGAN PENYIMPANAN LOCALSTORAGE -->
+<!-- JAVASCRIPT OTOMATISASI -->
 <script>
 function hitungSaldoAkhir() {
-    let inputIDR = document.getElementById("input-saldo-awal-idr");
-    let inputUSD = document.getElementById("input-saldo-awal-usd");
-
-    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
-    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
-
-    // SIMPAN DATA: Menyimpan nilai yang diinput ke memori browser
-    localStorage.setItem("saldoAwalIDR", inputIDR.value);
-    localStorage.setItem("saldoAwalUSD", inputUSD.value);
+    let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+    let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
 
     let teksPemasukan = document.getElementById("total-income").innerHTML;
     let teksPengeluaran = document.getElementById("total-expense").innerHTML;
@@ -191,24 +185,11 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
-// MEMUAT DATA KEMBALI SAAT REFRESH
-window.addEventListener("DOMContentLoaded", function() {
-    // Ambil data yang tersimpan di memori browser (jika ada)
-    let simpananIDR = localStorage.getItem("saldoAwalIDR");
-    let simpananUSD = localStorage.getItem("saldoAwalUSD");
-
-    // Masukkan kembali angka yang tersimpan ke dalam kolom input
-    if (simpananIDR !== null) document.getElementById("input-saldo-awal-idr").value = simpananIDR;
-    if (simpananUSD !== null) document.getElementById("input-saldo-awal-usd").value = simpananUSD;
-
-    // Jalankan kalkulasi angka awal
-    hitungSaldoAkhir();
-});
-
-// Event listener untuk mendeteksi ketikan user
 document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
 document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
+window.addEventListener("DOMContentLoaded", hitungSaldoAkhir);
 </script>
+
   
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
