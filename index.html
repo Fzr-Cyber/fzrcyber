@@ -414,12 +414,18 @@
         const saldoAkhirIDR = saldoAwalIDR + incomeIDR - expenseIDR;
         const saldoAkhirUSD = saldoAwalUSD + incomeUSD - expenseUSD;
 
-        document.getElementById('saldo-akhir-display').innerHTML = `IDR ${saldoAkhirIDR.toLocaleString('id-ID')}<br>USD ${saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
-    }
-
-    // Tambahan pemicu otomatis agar langsung menghitung saat angka saldo awal diketik di web
-    document.getElementById('saldo-awal-idr')?.addEventListener('input', ambilDataDariCloud);
-    document.getElementById('saldo-awal-usd')?.addEventListener('input', ambilDataDariCloud);
+        // Menembak ke box ringkasan atas dan box besar tengah sekaligus agar pasti berubah
+        if(document.getElementById('saldo-akhir-display')) {
+            document.getElementById('saldo-akhir-display').innerHTML = `IDR ${saldoAkhirIDR.toLocaleString('id-ID')}<br>USD ${saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+        }
+        
+        // Menembak elemen teks di box besar bawah (jika id elemen Anda di HTML terpisah)
+        const semuaBoxSaldo = document.querySelectorAll('p, div');
+        semuaBoxSaldo.forEach(el => {
+            if (el.innerText && el.innerText.includes('IDR 0') && el.innerText.includes('USD 0')) {
+                el.innerHTML = `IDR ${saldoAkhirIDR.toLocaleString('id-ID')}<br>USD ${saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+            }
+        });
 
         form.addEventListener('submit', e => {
             e.preventDefault(); btnSubmit.disabled = true; btnSubmit.textContent = "Menyimpan...";
