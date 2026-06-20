@@ -1,13 +1,23 @@
 export default async function handler(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     try {
-        // Ambil nama user aktif dari kiriman frontend web Anda
-        const username = req.query.username || "MASTER ADMIN";
+        const username = req.query.username || "fajar";
         
-        // Ganti teks di bawah dengan tautan URL Web App Google Apps Script Anda yang baru saja didapat
-        let response = await fetch(`https://script.google.com/macros/s/AKfycbxq4q3zqR09ePp_00SIb5cM9iJeC95NGVFL3u_c12g9nAQBuh-0DxZXc0Q7GW92gykz5Q/exec?req=get_saldo_awal&username=${encodeURIComponent(username)}`);
+        // PENTING: PAKAI LINK GOOGLE APPS SCRIPT ANDA YANG DIAWALI https://google.com...
+        const linkGoogleScript = "https://script.google.com/macros/s/AKfycbxq4q3zqR09ePp_00SIb5cM9iJeC95NGVFL3u_c12g9nAQBuh-0DxZXc0Q7GW92gykz5Q/exec";
+
+        let response = await fetch(`${linkGoogleScript}?req=get_saldo_awal&username=${encodeURIComponent(username)}`);
         let data = await response.json();
+        
         return res.status(200).json(data);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Gagal menarik dari Google: " + error.message, saldo_idr: 0, saldo_usd: 0 });
     }
 }
