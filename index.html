@@ -9,7 +9,6 @@
         body { background-color: #f3f4f6; padding: 20px; color: #333; margin: 0; }
         .container { max-width: 1100px; margin: 0 auto; }
         
-        /* DESAIN MENU DROPDOWN BARU DI BAGIAN ATAS */
         .navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; align-items: center; }
         .dropdown { position: relative; display: inline-block; }
         .dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
@@ -46,7 +45,7 @@
     </style>
 </head>
 <body>
-    <!-- NAV BAR DROPDOWN ATAS (Hanya Muncul Setelah Login) -->
+    <!-- NAV BAR DROPDOWN ATAS -->
     <div id="nav-top-container" class="container hidden" style="margin-top: 10px; margin-bottom: -10px;">
         <div class="navbar-top">
             <div class="dropdown">
@@ -57,7 +56,6 @@
                     <a href="#" onclick="alert('Fitur Laporan Segera Datang!')">Laporan Tahunan</a>
                 </div>
             </div>
-            
             <div class="dropdown">
                 <button class="dropbtn" style="background-color: #4b5563;">Menu Lainnya ▼</button>
                 <div class="dropdown-content">
@@ -85,7 +83,7 @@
         <div id="auth-toggle" class="auth-toggle">Belum punya akun? Daftar di sini</div>
     </div>
 
-    <!-- UTAMA DASHBOARD -->
+    <!-- MAIN APP DASHBOARD -->
     <div id="main-app" class="container hidden">
         <header>
             <div>
@@ -126,22 +124,22 @@
             </div>
 
             <div id="table-card">
-                <!-- BOX COMPONENT SALDO AWAL & DISPLAY SALDO AKHIR -->
+                <!-- BOX COMPONENT SALDO AWAL & SALDO AKHIR -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                    <div class="card" style="margin-bottom:0; padding:15px;">
+                    <div class="card" style="margin-bottom:0; padding: 15px;">
                         <label style="color:#4f46e5; font-size:13px; font-weight:600;">Input Saldo Awal</label>
-                        <input type="number" id="id-input-saldo-awal-idr" placeholder="IDR (Rp)" style="margin-bottom:6px; padding:6px;">
-                        <input type="number" id="id-input-saldo-awal-usd" placeholder="USD ($)" style="padding:6px;">
+                        <input type="number" id="saldo-awal-idr" placeholder="IDR (Rp)" style="margin-bottom:8px; padding: 6px;">
+                        <input type="number" id="saldo-awal-usd" placeholder="USD ($)" style="padding: 6px;">
                     </div>
-                    <div class="card" style="margin-bottom:0; text-align:center; padding:15px; background-color:#fafafa;">
+                    <div class="card" style="margin-bottom:0; text-align:center; padding: 15px; background-color:#fafafa;">
                         <label style="color:#b91c1c; font-size:13px; font-weight:600;">Saldo Akhir</label>
-                        <p id="id-saldo-akhir-display" style="font-size:16px; font-weight:bold; margin:10px 0 0 0; line-height:1.5; color:#111827;">
+                        <p id="saldo-akhir-display" style="font-size:16px; font-weight:bold; margin:10px 0 0 0; line-height:1.5; color:#111827;">
                             IDR 0<br>USD 0
                         </p>
                     </div>
                 </div>
 
-                <!-- BOX TOTAL INCOME & EXPENSE -->
+                <!-- BOX RINGKASAN TOTAL INCOME & EXPENSE -->
                 <div class="summary-box">
                     <div class="card-income">
                         <label style="font-size:13px; color:#065f46;">Total Pemasukan</label>
@@ -153,8 +151,8 @@
                     </div>
                 </div>
 
-                <!-- RIWAYAT DATA DATABASE UTAMA -->
-                <div class="card" style="overflow-x: auto; padding:15px;">
+                <!-- TABLE RIWAYAT DATABASE -->
+                <div class="card" style="overflow-x: auto; padding: 15px;">
                     <h3 style="margin-top:0; color:#1f2937; font-size:15px; margin-bottom:12px;">Riwayat Database</h3>
                     <table>
                         <thead>
@@ -169,12 +167,29 @@
                         <tbody id="transaction-list"></tbody>
                     </table>
                 </div>
+
+                <!-- KODE CONTROL PANEL ADMIN UTUH (DIKEMBALIKAN) -->
+                <div class="card" id="admin-panel-card" style="margin-top:20px; border-top: 3px solid #dc2626;">
+                    <h3 style="margin-top:0; color:#b91c1c; font-size:15px; margin-bottom:12px;">⚙️ Admin Control Panel (Kelola Pengguna)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama ID User</th>
+                                <th>Kata Sandi</th>
+                                <th style="text-align: center;">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-user-list">
+                            <!-- Daftar user kelola dimuat di sini -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <!-- LOGIKA INTERAKTIF JAVASCRIPT PART 1 -->
+    <!-- LOGIKA JAVASCRIPT PART 1 -->
     <script>
-        // VARIABLE DATABASE GOOGLE SHEETS ANDA (TETAP AMAN & UTUH)
+        // CORE DATABASE URL GOOGLE APPS SCRIPT ANDA
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTrHgNpyTeVu_DgvlAw4LOPgA4xp4_SkEmkS9b71-LJyG52kc1Sumed4euJ4B1AKPZOQ/exec";
 
         const categories = {
@@ -196,9 +211,9 @@
         const categorySelect = document.getElementById('category');
         const financeForm = document.getElementById('finance-form');
 
-        // Memicu perhitungan otomatis secara instan setiap kali kolom saldo awal diketik
-        document.getElementById('id-input-saldo-awal-idr').addEventListener('input', renderData);
-        document.getElementById('id-input-saldo-awal-usd').addEventListener('input', renderData);
+        // Memicu penghitungan ulang otomatis seketika saat saldo awal diketik
+        document.getElementById('saldo-awal-idr').addEventListener('input', renderData);
+        document.getElementById('saldo-awal-usd').addEventListener('input', renderData);
 
         authToggle.addEventListener('click', () => {
             isSignUpMode = !isSignUpMode;
@@ -225,6 +240,10 @@
             } else {
                 if (users[username] && users[username] === password) {
                     currentUser = username;
+                    
+                    // MEMPERBAIKI MASALAH REFRESH: Simpan nama admin agar session tidak logout
+                    sessionStorage.setItem("fz_active_user", currentUser);
+                    
                     masukAplikasi();
                 } else {
                     alert('Nama pengguna atau kata sandi salah!');
@@ -237,22 +256,24 @@
             mainApp.classList.remove('hidden');
             navTop.classList.remove('hidden');
             document.getElementById('user-display').innerHTML = `Login sebagai ID: <strong>${currentUser}</strong>`;
-            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = new Date().toISOString().split('T');
             
-            // Mengambil nilai saldo awal yang tersimpan di browser jika ada
-            document.getElementById('id-input-saldo-awal-idr').value = localStorage.getItem(`fzr_sa_idr_${currentUser}`) || '';
-            document.getElementById('id-input-saldo-awal-usd').value = localStorage.getItem(`fzr_sa_usd_${currentUser}`) || '';
+            // Muat nilai input saldo awal yang tersimpan dari memori browser agar tidak hilang
+            document.getElementById('saldo-awal-idr').value = localStorage.getItem(`fzr_sa_idr_${currentUser}`) || '';
+            document.getElementById('saldo-awal-usd').value = localStorage.getItem(`fzr_sa_usd_${currentUser}`) || '';
             
             updateCategoryOptions();
             loadTransactions();
+            renderAdminUsers(); // Muat panel kelola data admin
         }
 
         function keluarAkun() {
             currentUser = null;
             transactions = [];
             authForm.reset();
-            document.getElementById('id-input-saldo-awal-idr').value = '';
-            document.getElementById('id-input-saldo-awal-usd').value = '';
+            sessionStorage.removeItem("fz_active_user"); // Hapus jejak session saat sengaja klik logout
+            document.getElementById('saldo-awal-idr').value = '';
+            document.getElementById('saldo-awal-usd').value = '';
             authPage.classList.remove('hidden');
             mainApp.classList.add('hidden');
             navTop.classList.add('hidden');
@@ -306,6 +327,30 @@
             }
         }
 
+        function renderAdminUsers() {
+            const adminList = document.getElementById('admin-user-list');
+            if (!adminList) return;
+            adminList.innerHTML = '';
+            let users = JSON.parse(localStorage.getItem('fzr_users')) || {};
+            
+            Object.keys(users).forEach(user => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = "<td>" + user + "</td>" +
+                               "<td>•••••••</td>" +
+                               "<td style='text-align:center;'><button class='btn-delete' onclick='hapusUser(\""+user+"\")'>Hapus Akses</button></td>";
+                adminList.appendChild(tr);
+            });
+        }
+
+        function hapusUser(user) {
+            if (confirm("Hapus akses pengguna " + user + "?")) {
+                let users = JSON.parse(localStorage.getItem('fzr_users')) || {};
+                delete users[user];
+                localStorage.setItem('fzr_users', JSON.stringify(users));
+                renderAdminUsers();
+            }
+        }
+
         function formatCurrency(val, currency) {
             if (currency === 'IDR') {
                 return 'Rp ' + val.toLocaleString('id-ID');
@@ -314,16 +359,12 @@
             }
         }
 
-        // FUNGSI UTAMA KALKULASI OTOMATIS DAN AKURAT SALDO AKHIR REAL-TIME
+        // FUNGSI LOGIKA UTAMA: KALKULASI SALDO AWAL DAN SALDO AKHIR SECARA OTOMATIS
         function renderData() {
             const listContainer = document.getElementById('transaction-list');
             if (listContainer) listContainer.innerHTML = '';
 
-            let totals = { 
-                IDR: { Pemasukan: 0, Pengeluaran: 0 }, 
-                USD: { Pemasukan: 0, Pengeluaran: 0 } 
-            };
-            
+            let totals = { IDR: { Pemasukan: 0, Pengeluaran: 0 }, USD: { Pemasukan: 0, Pengeluaran: 0 } };
             transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             transactions.forEach(tx => {
@@ -335,7 +376,6 @@
                     const styleClass = tx.type === 'Pemasukan' ? 'text-income' : 'text-expense';
                     const prefix = tx.type === 'Pemasukan' ? '+' : '-';
 
-                    // Memecah innerHTML ke bawah agar aman 100% dari terpotong sistem pesan
                     tr.innerHTML = "<td>" + tx.date + "</td>" +
                                    "<td>" + tx.category + "</td>" +
                                    "<td>" + cleanDesc + "</td>" +
@@ -352,36 +392,45 @@
                 listContainer.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#888;">Belum ada data.</td></tr>`;
             }
 
-            // 1. Dapatkan Nilai Angka dari Kotak Input Saldo Awal (Gunakan 0 jika kosong)
-            const saldoAwalIDR = parseFloat(document.getElementById('id-input-saldo-awal-idr').value) || 0;
-            const saldoAwalUSD = parseFloat(document.getElementById('id-input-saldo-awal-usd').value) || 0;
+            // 1. Ambil nilai ketikan angka dari kolom input Saldo Awal Anda (jika kosong set ke nilai 0)
+            const saldoAwalIDR = parseFloat(document.getElementById('saldo-awal-idr').value) || 0;
+            const saldoAwalUSD = parseFloat(document.getElementById('saldo-awal-usd').value) || 0;
 
-            // Simpan nilai input saldo awal ke memori lokal browser agar awet saat di-refresh
+            // Simpan otomatis isi angka saldo awal ke browser agar tidak ter-reset saat di-refresh
             if (currentUser) {
-                localStorage.setItem(`fzr_sa_idr_${currentUser}`, document.getElementById('id-input-saldo-awal-idr').value);
-                localStorage.setItem(`fzr_sa_usd_${currentUser}`, document.getElementById('id-input-saldo-awal-usd').value);
+                localStorage.setItem(`fzr_sa_idr_${currentUser}`, document.getElementById('saldo-awal-idr').value);
+                localStorage.setItem(`fzr_sa_usd_${currentUser}`, document.getElementById('saldo-awal-usd').value);
             }
 
-            // 2. Eksekusi Rumus Matematika Saldo Akhir Komparatif Global
+            // 2. Operasi Rumus Matematika Saldo Akhir Komparatif Global
             const saldoAkhirIDR = saldoAwalIDR + totals.IDR.Pemasukan - totals.IDR.Pengeluaran;
             const saldoAkhirUSD = saldoAwalUSD + totals.USD.Pemasukan - totals.USD.Pengeluaran;
 
-            // 3. Render Pembaruan Akumulasi Angka ke Panel Dasbor Atas
+            // 3. Masukkan total akumulasi kas Pemasukan & Pengeluaran ke layar dasbor atas
             document.getElementById('total-income').innerHTML = 
                 formatCurrency(totals.IDR.Pemasukan, 'IDR') + "<br>" +
-                "<span style='font-size:13px; font-weight:normal; color:#4b5563;'>" + 
+                "<span style='font-size:14px; font-weight:normal; color:#4b5563;'>" + 
                 formatCurrency(totals.USD.Pemasukan, 'USD') + "</span>";
 
             document.getElementById('total-expense').innerHTML = 
                 formatCurrency(totals.IDR.Pengeluaran, 'IDR') + "<br>" +
-                "<span style='font-size:13px; font-weight:normal; color:#4b5563;'>" + 
+                "<span style='font-size:14px; font-weight:normal; color:#4b5563;'>" + 
                 formatCurrency(totals.USD.Pengeluaran, 'USD') + "</span>";
 
-            // 4. Salurkan Hasil Perhitungan Akhir ke Layar secara Real-time
-            document.getElementById('id-saldo-akhir-display').innerHTML = 
+            // 4. Update teks penampil Saldo Akhir secara instan dan real-time
+            document.getElementById('saldo-akhir-display').innerHTML = 
                 "IDR " + saldoAkhirIDR.toLocaleString('id-ID') + "<br>" +
                 "USD " + saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
         }
+
+        // LOGIKA PENYELAMAT REFRESH: Membaca session aktif agar tidak le-logout saat halaman disegarkan
+        window.addEventListener('load', () => {
+            const savedUser = sessionStorage.getItem("fz_active_user");
+            if (savedUser) {
+                currentUser = savedUser;
+                masukAplikasi();
+            }
+        });
     </script>
 </body>
 </html>
