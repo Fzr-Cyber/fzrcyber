@@ -177,25 +177,39 @@
     </div>
 
     <!-- KOLOM 4: SALDO AKHIR -->
+    <!-- 1. Pastikan ini bagian akhir dari KOLOM 4 SALDO AKHIR -->
     <div class="card" style="background-color: #f9fafb; ...">
         <small style="...">Saldo Akhir</small>
         <p id="total-ending" class="card-amount">IDR 0<br>USD 0</p>
     </div> <!-- Penutup Kolom 4 -->
 
-</div> <!-- 🌟 TAMBAHKAN BARIS INI: Penutup summary-box yang kurang -->
-</div> <!-- Penutup table-card -->
-              
-                <div class="card" style="width: 100%;">
-                    <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
-                    <table>
-                        <thead>
-                            <tr id="table-header-row">
-                                <th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th style="text-align: right;">Jumlah</th><th id="th-action" style="text-align: center;" class="hidden">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transaction-list"></tbody>
-                    </table>
-                </div>
+</div> <!-- 🌟 Penutup summary-box -->
+</div> <!-- 🌟 Penutup table-card -->
+</div> <!-- 🌟 Penutup grid -->
+
+<!-- 2. TABEL RIWAYAT DATABASE (Harus di dalam main-app) -->
+<div class="card" style="width: 100%; margin-top: 20px;">
+    <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr id="table-header-row">
+                    <th>Tanggal</th>
+                    <th>Kategori</th>
+                    <th>Keterangan</th>
+                    <th style="text-align: right;">Jumlah</th>
+                    <th id="th-action" style="text-align: center;">Tindakan</th>
+                </tr>
+            </thead>
+            <tbody id="transaction-list">
+                <!-- Data transaksi -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div> <!-- 🌟 4. PINDAHKAN TAG INI KE PALING BAWAH (Sebagai Penutup main-app) -->
+
                 <div class="card hidden" id="admin-control-card" style="width: 100%; border-top: 4px solid #b91c1c;">
                     <h3 style="margin-top:0; margin-bottom:15px; color:#b91c1c;">⚙️ Admin Control Panel (Kelola Pengguna)</h3>
                     <table>
