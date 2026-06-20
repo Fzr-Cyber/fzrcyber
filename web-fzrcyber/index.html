@@ -5,93 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FZRCyber - Panel Keuangan Cloud Global</title>
     <style>
+/* ==========================================================================
+   GANTI SEMUA KODE DI DALAM TAG <style> ANDA DENGAN KODE BERIKUT
+   ========================================================================== */
 * { box-sizing: border-box; font-family: sans-serif; }
-body { background-color: #f8fafc; padding: 25px 20px; color: #1e293b; margin: 0; }
+body { background-color: #f1f5f9; padding: 25px 20px; color: #1e293b; margin: 0; }
 .container { max-width: 1100px; margin: 0 auto; }
 
-/* Desain Top Menu Navigasi Modern */
-.navbar-top { background: white; padding: 12px 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 25px; display: flex; justify-content: flex-start; gap: 15px; border: 1px solid #e2e8f0; }
+/* Menu Navigasi Atas */
+.navbar-top { background: white; padding: 12px 24px; border-radius: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 25px; display: flex; justify-content: flex-start; gap: 15px; border: 1px solid #e2e8f0; }
 .dropdown { position: relative; display: inline-block; }
-.dropbtn { background-color: #4f46e5; color: white; padding: 11px 18px; font-size: 14px; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
+.dropbtn { background-color: #4f46e5; color: white; padding: 10px 18px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
 .dropbtn:hover { background-color: #4338ca; transform: translateY(-1px); }
-.dropdown-content { display: none; position: absolute; background-color: white; min-width: 200px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-radius: 12px; z-index: 1000; margin-top: 8px; border: 1px solid #f1f5f9; overflow: hidden; }
-.dropdown-content a { color: #334155; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; transition: all 0.2s; }
+.dropdown-content { display: none; position: absolute; background-color: white; min-width: 190px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-radius: 10px; z-index: 1000; margin-top: 6px; border: 1px solid #f1f5f9; overflow: hidden; }
+.dropdown-content a { color: #334155; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; transition: 0.2s; }
 .dropdown-content a:hover { background-color: #f1f5f9; color: #4f46e5; padding-left: 20px; }
 .dropdown:hover .dropdown-content { display: block; }
 
-/* Tata Letak Kontainer */
+/* Header Judul Utama */
 header { text-align: center; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-.grid { display: grid; grid-template-columns: 360px 1fr; gap: 25px; }
-@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+.grid { display: grid; grid-template-columns: 350px 1fr; gap: 25px; }
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-/* Desain Kartu Form & Tabel Dashboard */
+/* Desain Kartu Panel Form & Tabel */
 .card, #table-card { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; height: fit-content; margin-bottom: 20px; }
 
-/* Kontrol Form Input */
-.form-group { margin-bottom: 18px; }
+/* Pengaturan Kolom Form Input */
+.form-group { margin-bottom: 16px; }
 label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; }
-input, select { width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; color: #1e293b; background-color: #f8fafc; transition: all 0.2s; }
+input, select { width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; color: #1e293b; background-color: #f8fafc; transition: all 0.2s; }
 input:focus, select:focus { outline: none; border-color: #4f46e5; background-color: white; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
 
-/* Tombol Aksi */
-.btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2); }
+/* Tombol */
+.btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2); }
 .btn-submit:hover { background-color: #047857; transform: translateY(-1px); }
-.btn-logout { background-color: #dc2626; color: white; padding: 10px 18px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+.btn-logout { background-color: #dc2626; color: white; padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
 .btn-logout:hover { background-color: #b91c1c; transform: translateY(-1px); }
 .btn-delete { background-color: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; }
 
-/* MENYAMAKAN UKURAN KOTAK METRIK SECARA SEMPURNA & ELEGAN */
-.summary-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 25px; }
+/* MENYAMAKAN TIGA KOTAK SECARA OTOMATIS (SANGAT ELEGAN) */
+.summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 25px; }
 
-.card-income, .card-expense, [class*="card-balance"], #table-card > .summary-box > div { 
+/* Kode sakti: Memaksa semua elemen kotak di dalam summary-box berukuran sama persis */
+.summary-box > div, .card-income, .card-expense { 
     background-color: white !important; 
     border: 1px solid #e2e8f0 !important; 
-    padding: 18px 16px !important; 
-    border-radius: 16px !important; 
+    padding: 16px 14px !important; 
+    border-radius: 12px !important; 
     text-align: left !important; 
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02) !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    min-height: 100px !important;
+    min-height: 95px !important;
 }
 
-/* Garis Batas Indikator Warna Mewah di Sisi Kiri */
-.card-income { border-left: 4px solid #10b981 !important; }
-.card-expense { border-left: 4px solid #f43f5e !important; }
-/* Penerapan otomatis untuk kotak ke-3 (Saldo Akhir) agar berukuran sama presisi */
-#table-card > .summary-box > div:nth-child(3) { border-left: 4px solid #3b82f6 !important; }
+/* Memberikan warna garis batas tipis yang mewah di sisi kiri masing-masing kotak secara urut */
+.summary-box > div:nth-child(1), .card-income { border-left: 4px solid #10b981 !important; }
+.summary-box > div:nth-child(2), .card-expense { border-left: 4px solid #f43f5e !important; }
+.summary-box > div:nth-child(3) { border-left: 4px solid #3b82f6 !important; }
 
-.card-income small, .card-expense small, #table-card > .summary-box > div small {
+/* Mengatur font teks label atas pada kotak metrik */
+.summary-box > div small, .card-income small, .card-expense small {
     font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
     color: #64748b !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
     display: block !important;
 }
 
-.card-amount { font-size: 18px !important; font-weight: 700 !important; margin: 0 !important; color: #0f172a !important; line-height: 1.5 !important; letter-spacing: -0.02em !important; }
-.card-income .card-amount { color: #047857 !important; }
-.card-expense .card-amount { color: #b91c1c !important; }
-#table-card > .summary-box > div:nth-child(3) .card-amount { color: #1e3a8a !important; }
+/* Mengatur font angka nominal di dalam kotak metrik */
+.card-amount, .summary-box > div p, .summary-box > div div { 
+    font-size: 16px !important; 
+    font-weight: 700 !important; 
+    margin: 0 !important; 
+    line-height: 1.4 !important; 
+    letter-spacing: -0.01em !important; 
+}
+.card-income .card-amount, .summary-box > div:nth-child(1) p { color: #047857 !important; }
+.card-expense .card-amount, .summary-box > div:nth-child(2) p { color: #b91c1c !important; }
+.summary-box > div:nth-child(3) p, .summary-box > div:nth-child(3) div { color: #1e3a8a !important; }
 
-/* Desain Tabel Database Modern */
-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 14px; }
-th { padding: 14px 16px; background-color: #f8fafc; color: #475569; font-weight: 600; border-bottom: 2px solid #e2e8f0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
-td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: middle; }
+/* Desain Tabel Riwayat Database */
+table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 14px; margin-top: 10px; }
+th { padding: 12px 14px; background-color: #f8fafc; color: #475569; font-weight: 600; border-bottom: 2px solid #e2e8f0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
+td { padding: 12px 14px; border-bottom: 1px solid #f1f5f9; color: #334155; vertical-align: middle; }
 tr:hover td { background-color: #f8fafc; }
 
 .text-income { color: #10b981; font-weight: 600; text-align: right; }
 .text-expense { color: #ef4444; font-weight: 600; text-align: right; }
 
-/* Area Login */
-.auth-container { max-width: 420px; margin: 100px auto; background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-.auth-toggle { text-align: center; margin-top: 20px; font-size: 14px; color: #4f46e5; font-weight: 500; cursor: pointer; }
+/* Halaman Login */
+.auth-container { max-width: 400px; margin: 100px auto; background: white; padding: 35px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+.auth-toggle { text-align: center; margin-top: 18px; font-size: 14px; color: #4f46e5; font-weight: 500; cursor: pointer; }
 .hidden { display: none !important; }
 .admin-badge { background-color: #e0e7ff; color: #4f46e5; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid #c7d2fe; }
-.currency-row { display: grid; grid-template-columns: 100px 1fr; gap: 10px; }
+.currency-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; }
+
     </style>
 </head>
 <body>
