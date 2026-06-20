@@ -127,7 +127,7 @@
             </div>
 
             <div id="table-card">
-                <div class="summary-box">
+                    <div class="summary-box" style="display: flex; flex-wrap: wrap; gap: 15px; width: 100%; margin-bottom: 20px;">
                     <div class="card-income">
                         <small id="income-label">Total Pemasukan</small>
                         <p id="total-income" class="card-amount">IDR 0<br>USD 0</p>
@@ -137,7 +137,11 @@
                         <p id="total-expense" class="card-amount">IDR 0<br>USD 0</p>
                     </div>
                 </div>
-
+                        <!-- KOTAK TAMPILAN SALDO AKHIR OTOMATIS -->
+        <div class="card-ending" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 10px; border-radius: 8px; text-align: center; flex: 1;">
+            <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
+            <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">IDR 0<br>USD 0</p>
+        </div>
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Memuat riwayat database...</h3>
                     <table>
