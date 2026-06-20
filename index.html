@@ -126,51 +126,48 @@
             </div>
 
             <div id="table-card">
-<div class="summary-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-    
-<!-- KOLOM 1: INPUT SALDO AWAL -->
-<div class="card" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0;">
-    <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
-    <div style="display: flex; flex-direction: column; gap: 8px;">
-        <!-- Perbaikan: value diubah menjadi 0 agar tidak error bertipe number -->
-        <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
-        <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
+<div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
+
+    <!-- KOLOM 1: INPUT SALDO AWAL -->
+    <div class="card" style="flex: 1; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
+        <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
+            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
+        </div>
     </div>
-</div>
 
-<!-- KOLOM 2: TOTAL PEMASUKAN -->
-<div class="card-income" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
-    <small id="income-label">Total Pemasukan</small>
-    <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
-</div>
+    <!-- KOLOM 2: TOTAL PEMASUKAN -->
+    <div class="card-income" style="flex: 1; background-color: #e6f4ea; border: 1px solid #34a853; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+        <small id="income-label" style="color: #137333; font-weight: 600; display: block; margin-bottom: 8px;">Total Pemasukan</small>
+        <p id="total-income" class="card-amount" style="color: #137333; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
+    </div>
 
-<!-- KOLOM 3: TOTAL PENGELUARAN -->
-<div class="card-expense" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
-    <small id="expense-label">Total Pengeluaran</small>
-    <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
-</div>
+    <!-- KOLOM 3: TOTAL PENGELUARAN -->
+    <div class="card-expense" style="flex: 1; background-color: #fce8e6; border: 1px solid #ea4335; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+        <small id="expense-label" style="color: #c5221f; font-weight: 600; display: block; margin-bottom: 8px;">Total Pengeluaran</small>
+        <p id="total-expense" class="card-amount" style="color: #c5221f; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
+    </div>
 
-<!-- KOLOM 4: SALDO AKHIR -->
-<div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0; display: flex; flex-direction: column; justify-content: center;">
-    <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
-    <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
-</div>
+    <!-- KOLOM 4: SALDO AKHIR -->
+    <div class="card" style="flex: 1; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
+        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
+    </div>
+
+</div> <!-- PENUTUP KONTANER UTAMA -->
 
 <!-- JAVASCRIPT OTOMATISASI -->
 <script>
 function hitungSaldoAkhir() {
-    // 1. Ambil nilai Input Saldo Awal
     let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
     let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
 
-    // 2. Ambil teks Pemasukan dan Pengeluaran
     let teksPemasukan = document.getElementById("total-income").innerHTML;
     let teksPengeluaran = document.getElementById("total-expense").innerHTML;
 
-    // Fungsi pembantu untuk memisahkan IDR dan USD dari teks (menggunakan pemisah <br>)
     function ekstrakNilai(teks) {
         let bagian = teks.split(/<br\s*\/?>/i);
-        // Hapus karakter selain angka, titik, dan minus
         let idr = bagian[0] ? parseFloat(bagian[0].replace(/[^0-9.-]+/g, "")) : 0;
         let usd = bagian[1] ? parseFloat(bagian[1].replace(/[^0-9.-]+/g, "")) : 0;
         return { idr: isNaN(idr) ? 0 : idr, usd: isNaN(usd) ? 0 : usd };
@@ -179,20 +176,15 @@ function hitungSaldoAkhir() {
     let pemasukan = ekstrakNilai(teksPemasukan);
     let pengeluaran = ekstrakNilai(teksPengeluaran);
 
-    // 3. Rumus Matematika: Saldo Akhir = Saldo Awal + Pemasukan - Pengeluaran
     let totalIDR = saldoAwalIDR + pemasukan.idr - pengeluaran.idr;
     let totalUSD = saldoAwalUSD + pemasukan.usd - pengeluaran.usd;
 
-    // 4. Cetak kembali ke elemen Saldo Akhir dengan format angka rapi
     document.getElementById("total-ending").innerHTML = 
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
-// Menjalankan kalkulator otomatis setiap kali user mengetik di Saldo Awal
 document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
 document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
-
-// Menjalankan kalkulator otomatis pertama kali saat halaman selesai dimuat
 window.addEventListener("DOMContentLoaded", hitungSaldoAkhir);
 </script>
               
