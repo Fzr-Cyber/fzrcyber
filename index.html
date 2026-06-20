@@ -160,14 +160,32 @@
 </div> <!-- PENUTUP KONTANER UTAMA -->
 
 <script>
-// --- TAMBAHAN BARU: FUNGSI SINKRONISASI DATABASE SERVER PC & HP ---
+// --- TAMBAHAN BARU: MENDETEKSI USERNAME & FUNGSI DOMPLENG DATABASE TRANSAKSI ---
+function dapatkanUserAktif() {
+    // Otomatis mengambil ID pengguna yang sedang login di layar (misal: "fajar")
+    let elemenUser = document.querySelector('small[style*="color"]');
+    if (elemenUser) {
+        return elemenUser.innerText.replace("Login sebagai ID:", "").replace("Login sebagai:", "").trim();
+    }
+    return "default_user";
+}
+
 async function muatSaldoDariDatabaseServer() {
     try {
-        let response = await fetch('/api/get-saldo-awal'); 
+        let userID = dapatkanUserAktif();
+        // Mengambil dari API transaksi yang sudah aktif di web Anda
+        let response = await fetch('/api/get-transaksi'); 
         if (response.ok) {
-            let data = await response.json();
-            if(data.saldo_idr !== undefined) document.getElementById("input-saldo-awal-idr").value = data.saldo_idr;
-            if(data.saldo_usd !== undefined) document.getElementById("input-saldo-awal-usd").value = data.saldo_usd;
+            let listTransaksi = await response.json();
+            
+            // Cari data saldo awal milik user yang sedang login saat ini
+            let dataIDR = listTransaksi.find(t => t.kategori === "Saldo Awal" && t.mata_uang === "IDR" && t.username === userID);
+            let dataUSD = listTransaksi.find(t => t.kategori === "Saldo Awal" && t.mata_uang === "USD" && t.username === userID);
+
+            if(dataIDR !== undefined && dataIDR.jumlah !== undefined) document.getElementById("input-saldo-awal-idr").value = dataIDR.jumlah;
+            if(dataUSD !== undefined && dataUSD.jumlah !== undefined) document.getElementById("input-saldo-awal-usd").value = dataUSD.jumlah;
+            
+            // Panggil kalkulator bawaan Anda untuk memperbarui visual layar
             hitungSaldoAkhir();
         }
     } catch (error) {
@@ -181,16 +199,29 @@ function simpanSaldoKeDatabaseServer() {
     timeoutSimpanCloud = setTimeout(async () => {
         let idr = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
         let usd = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+        let userID = dapatkanUserAktif();
+
         try {
-            await fetch('/api/save-saldo-awal', {
+            // Mengirim data saldo ke database utama lewat API transaksi bawaan Anda
+            // (Sesuaikan rute '/api/simpan-transaksi' jika nama file backend Anda berbeda)
+            await fetch('/api/simpan-transaksi', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ saldo_idr: idr, saldo_usd: usd })
+                body: JSON.stringify({ 
+                    username: userID,
+                    jenis: "Pemasukan",
+                    kategori: "Saldo Awal", 
+                    tanggal: new Date().toISOString().split('T')[0],
+                    jumlah_idr: idr,
+                    jumlah_usd: usd,
+                    keterangan: "Sinkronisasi otomatis saldo awal"
+                })
             });
+            console.log("Saldo awal berhasil diunggah ke cloud database!");
         } catch (error) {
             console.error("Gagal sinkronisasi data ke cloud database:", error);
         }
-    }, 500);
+    }, 800);
 }
 // ------------------------------------------------------------------
 
