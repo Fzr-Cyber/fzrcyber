@@ -126,10 +126,11 @@
             </div>
 
             <div id="table-card">
-div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
+<div class="summary-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+  <div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
 
     <!-- KOLOM 1: INPUT SALDO AWAL -->
-    <div style="flex: 1; min-width: 150px; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
+    <div class="card" style="flex: 1; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
         <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
         <div style="display: flex; flex-direction: column; gap: 8px;">
             <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
@@ -138,61 +139,27 @@ div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: stretch; marg
     </div>
 
     <!-- KOLOM 2: TOTAL PEMASUKAN -->
-    <div class="card-income" style="flex: 1; min-width: 150px; background-color: #e6f4ea; border: 1px solid #34a853; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+    <div class="card-income" style="flex: 1; background-color: #e6f4ea; border: 1px solid #34a853; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
         <small id="income-label" style="color: #137333; font-weight: 600; display: block; margin-bottom: 8px;">Total Pemasukan</small>
         <p id="total-income" class="card-amount" style="color: #137333; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
     </div>
 
     <!-- KOLOM 3: TOTAL PENGELUARAN -->
-    <div class="card-expense" style="flex: 1; min-width: 150px; background-color: #fce8e6; border: 1px solid #ea4335; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
+    <div class="card-expense" style="flex: 1; background-color: #fce8e6; border: 1px solid #ea4335; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
         <small id="expense-label" style="color: #c5221f; font-weight: 600; display: block; margin-bottom: 8px;">Total Pengeluaran</small>
         <p id="total-expense" class="card-amount" style="color: #c5221f; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
     </div>
 
     <!-- KOLOM 4: SALDO AKHIR -->
-    <div style="flex: 1; min-width: 150px; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+    <div class="card" style="flex: 1; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
         <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
         <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
     </div>
 
-</div>
+</div> <!-- PENUTUP KONTANER UTAMA -->
 
-
-<!-- JAVASCRIPT INTEGRASI DATABASE (SINKRON PC & HP) -->
+<!-- JAVASCRIPT OTOMATISASI -->
 <script>
-async function muatSaldoAwalDariDatabase() {
-    try {
-        let response = await fetch('/api/get-saldo-awal'); 
-        if (response.ok) {
-            let data = await response.json();
-            document.getElementById("input-saldo-awal-idr").value = data.saldo_idr || 0;
-            document.getElementById("input-saldo-awal-usd").value = data.saldo_usd || 0;
-            hitungSaldoAkhir();
-        }
-    } catch (error) {
-        console.error("Gagal mengambil data dari database:", error);
-    }
-}
-
-let timeoutSimpan;
-function simpanSaldoKeDatabase() {
-    clearTimeout(timeoutSimpan);
-    timeoutSimpan = setTimeout(async () => {
-        let saldoIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
-        let saldoUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
-
-        try {
-            await fetch('/api/save-saldo-awal', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ saldo_idr: saldoIDR, saldo_usd: saldoUSD })
-            });
-        } catch (error) {
-            console.error("Gagal sinkronisasi ke database:", error);
-        }
-    }, 500);
-}
-
 function hitungSaldoAkhir() {
     let saldoAwalIDR = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
     let saldoAwalUSD = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
@@ -217,20 +184,11 @@ function hitungSaldoAkhir() {
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
 
-document.getElementById("input-saldo-awal-idr").addEventListener("input", () => {
-    hitungSaldoAkhir();
-    simpanSaldoKeDatabase();
-});
-document.getElementById("input-saldo-awal-usd").addEventListener("input", () => {
-    hitungSaldoAkhir();
-    simpanSaldoKeDatabase();
-});
-
-window.addEventListener("DOMContentLoaded", muatSaldoAwalDariDatabase);
+document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
+document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
+window.addEventListener("DOMContentLoaded", hitungSaldoAkhir);
 </script>
-
-
-              
+  
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
                     <table>
