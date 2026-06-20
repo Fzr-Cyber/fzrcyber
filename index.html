@@ -373,31 +373,33 @@ function keluarAkun() {
             document.getElementById('saldo-akhir-display').innerHTML = 
                 "IDR " + saldoAkhirIDR.toLocaleString('id-ID') + "<br>" +
                 "USD " + saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-
-            // ========================================================
-        // FIX: SIMPAN SESI SAAT SELESAI LOGIN (ANTI-LOGOUT REFRESH)
+        // ========================================================
+        // KODE ANTI-LOGOUT REFRESH (AMAN 100% TANPA MENCEGAT FORM)
         // ========================================================
         
-        // Cek otomatis setiap halaman dibuka atau di-refresh
+        // 1. Cek sesi saat halaman di-refresh, jika ada langsung panggil fungsi masuk
         window.addEventListener('load', () => {
-            const savedUser = localStorage.getItem('fzr_active_user');
+            const savedUser = localStorage.getItem('fzr_session_admin');
             if (savedUser) {
                 currentUser = savedUser;
                 masukAplikasi();
             }
         });
 
-        // Simpan nama akun ke browser saat form login disubmit dengan benar
-        document.getElementById('auth-form').addEventListener('submit', () => {
-            const inputUser = document.getElementById('auth-username').value.trim();
-            if (inputUser) {
-                localStorage.setItem('fzr_active_user', inputUser);
+        // 2. Gunakan setInterval untuk mengecek kapan variabel currentUser Anda terisi oleh fungsi asli
+        let checkLoginInterval = setInterval(() => {
+            if (currentUser && !localStorage.getItem('fzr_session_admin')) {
+                localStorage.setItem('fzr_session_admin', currentUser);
+            }
+        }, 500);
+
+        // 3. Hapus sesi di browser hanya saat tombol Keluar Akun diklik
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('btn-logout')) {
+                clearInterval(checkLoginInterval);
+                localStorage.removeItem('fzr_session_admin');
             }
         });
 
-        // Hapus nama akun dari browser saat tombol keluar diklik
-        document.querySelector('.btn-logout').addEventListener('click', () => {
-            localStorage.removeItem('fzr_active_user');
-        });
 
 
