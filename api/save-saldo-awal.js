@@ -1,11 +1,12 @@
-import { kv } from '@vercel/kv';
-
 export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Metode tidak diizinkan' });
     try {
-        const { saldo_idr, saldo_usd } = req.body;
-        await kv.set('global_saldo_idr', saldo_idr || 0);
-        await kv.set('global_saldo_usd', saldo_usd || 0);
+        // Ganti URL di bawah dengan URL Web App Google Sheets Anda nanti
+        await fetch('https://script.google.com/macros/s/AKfycbwTrHgNpyTeVu_DgvlAw4LOPgA4xp4_SkEmkS9b71-LJyG52kc1Sumed4euJ4B1AKPZOQ/exec', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(req.body)
+        });
         return res.status(200).json({ success: true });
     } catch (error) {
         return res.status(500).json({ error: error.message });
