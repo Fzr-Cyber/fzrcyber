@@ -434,27 +434,37 @@
 
 window.addEventListener("load", () => {
     let savedUser = sessionStorage.getItem("fz_active_user");
-    if (savedUser) { 
-        currentUser = savedUser; 
-        authPage.classList.add('hidden'); 
-        mainApp.classList.remove('hidden'); 
-        navTopContainer.classList.remove('hidden'); 
+    if (savedUser) {
+        currentUser = savedUser;
+        authPage.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+        navTopContainer.classList.remove('hidden');
     }
 });
 
-    // MEMUAT DATA KUNCIAN AGAR TIDAK HILANG SAAT REFRESH
-    let localIDR = localStorage.getItem('saved_saldo_awal_idr') || 0;
-    let localUSD = localStorage.getItem('saved_saldo_awal_usd') || 0;
-    
-    document.getElementById('input-saldo-awal-idr').value = localIDR;
-    document.getElementById('input-saldo-awal-usd').value = localUSD;
+// HAPUS SEMUA BARIS TEKS INI DI BAWAH </html> :
+// HAPUS TOTAL BARIS INI (Baris 445 sampai 456 di file Anda):
+// // MEMUAT DATA KUNCIAN AGAR TIDAK HILANG SAAT REFRESH
+let localIDR = localStorage.getItem('saved_saldo_awal_idr') || 0;
+let localUSD = localStorage.getItem('saved_saldo_awal_usd') || 0;
 
-    // Menghitung ulang saldo saat pertama kali aplikasi dibuka
-    if (typeof ambilDataDariCloud === 'function') {
-        ambilDataDariCloud();
+document.getElementById('input-saldo-awal-idr').value = localIDR;
+document.getElementById('input-saldo-awal-usd').value = localUSD;
+
+// // Menghitung ulang saldo saat pertama kali aplikasi dibuka
+if (typeof ambilDataDariCloud === 'function') {
+    ambilDataDariCloud();
+}
+window.addEventListener("load", () => {
+    let savedUser = sessionStorage.getItem("fz_active_user");
+    if (savedUser) {
+        currentUser = savedUser;
+        authPage.classList.add('hidden');
+        mainApp.classList.remove('hidden');
+        navTopContainer.classList.remove('hidden');
     }
 });
-    </script>
+</script>
 </body>
 </html>
 
