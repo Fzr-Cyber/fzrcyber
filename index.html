@@ -130,57 +130,64 @@
 <div class="summary-box" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
     
     <!-- KOLOM 1: INPUT SALDO AWAL -->
-                    <div class="card" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0;">
-                        <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
-                            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
-                        </div>
-                    </div>
-
-                    <!-- KOLOM 2: TOTAL PEMASUKAN -->
-                    <div class="card-income" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 15px;">
-                        <small id="income-label">Total Pemasukan</small>
-                        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
-                    </div>
-
-                    <!-- KOLOM 3: TOTAL PENGELUARAN -->
-                    <div class="card-expense" style="height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 15px;">
-                        <small id="expense-label">Total Pengeluaran</small>
-                        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
-                    </div>
-
-                    <!-- KOLOM 4: SALDO AKHIR -->
-                    <div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0; display: flex; flex-direction: column; justify-content: center;">
-                        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
-                        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
-                    </div>
-                </div>
-            </div> <!-- Penutup table-card -->
-        </div> <!-- Penutup grid -->
-
-        <!-- TABEL RIWAYAT DATABASE SEKARANG DI LUAR GRID (LEBAR 100%) -->
-        <div class="card" style="width: 100%; margin-top: 20px;">
-            <h3 style="margin-top:0; color:#1f2937;">Riwayat Database</h3>
-            <div style="overflow-x:auto;">
-                <table style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Kategori</th>
-                            <th>Keterangan</th>
-                            <th style="text-align: right;">Jumlah</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transaction-rows">
-                        <!-- Baris data transaksi masuk disini -->
-                    </tbody>
-                </table>
-            </div>
+    <div class="card" style="background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0;">
+        <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
+            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; display: block;">
         </div>
+    </div>
 
-    </div> <!-- Penutup <div id="main-app"> -->
+    <!-- KOLOM 2: TOTAL PEMASUKAN -->
+    <div class="card-income" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <small id="income-label">Total Pemasukan</small>
+        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
+    </div>
 
+    <!-- KOLOM 3: TOTAL PENGELUARAN -->
+    <div class="card-expense" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <small id="expense-label">Total Pengeluaran</small>
+        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
+    </div>
+
+    <!-- KOLOM 4: SALDO AKHIR -->
+    <div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 0; display: flex; flex-direction: column; justify-content: center;">
+        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
+        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
+    </div>
+
+</div>
+
+    <!-- KOLOM 2: TOTAL PEMASUKAN -->
+    <div class="card-income">
+        <small id="income-label">Total Pemasukan</small>
+        <p id="total-income" class="card-amount">IDR 0<br>USD 0</p>
+    </div>
+
+    <!-- KOLOM 3: TOTAL PENGELUARAN -->
+    <div class="card-expense">
+        <small id="expense-label">Total Pengeluaran</small>
+        <p id="total-expense" class="card-amount">IDR 0<br>USD 0</p>
+    </div>
+
+    <!-- KOLOM 4: SALDO AKHIR (OTOMATIS) -->
+    <div class="card-income" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center;">
+        <small style="color: #374151; font-weight: 600;">Saldo Akhir</small>
+        <p id="total-ending" class="card-amount" style="color: #111827;">IDR 0<br>USD 0</p>
+    </div>
+</div>
+              
+                <div class="card" style="width: 100%;">
+                    <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
+                    <table>
+                        <thead>
+                            <tr id="table-header-row">
+                                <th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th style="text-align: right;">Jumlah</th><th id="th-action" style="text-align: center;" class="hidden">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-list"></tbody>
+                    </table>
+                </div>
                 <div class="card hidden" id="admin-control-card" style="width: 100%; border-top: 4px solid #b91c1c;">
                     <h3 style="margin-top:0; margin-bottom:15px; color:#b91c1c;">⚙️ Admin Control Panel (Kelola Pengguna)</h3>
                     <table>
@@ -397,21 +404,8 @@
             }
             document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
             document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
+        }
 
-        // --- KODE REVISI: KALKULASI & PENYIMPANAN OTOMATIS LOCALSTORAGE ---
-        let saldoAwalIDR = parseFloat(document.getElementById('input-saldo-awal-idr').value) || 0;
-        let saldoAwalUSD = parseFloat(document.getElementById('input-saldo-awal-usd').value) || 0;
-
-        // Kunci nilai ke dalam localStorage setiap kali ada perubahan input
-        localStorage.setItem('saved_saldo_awal_idr', saldoAwalIDR);
-        localStorage.setItem('saved_saldo_awal_usd', saldoAwalUSD);
-
-        let saldoAkhirIDR = saldoAwalIDR + incomeIDR - expenseIDR;
-        let saldoAkhirUSD = saldoAwalUSD + incomeUSD - expenseUSD;
-
-        document.getElementById('total-ending').innerHTML = `${formatUang(saldoAkhirIDR, 'IDR')}<br>${formatUang(saldoAkhirUSD, 'USD')}`;
-
-          }  
         form.addEventListener('submit', e => {
             e.preventDefault(); btnSubmit.disabled = true; btnSubmit.textContent = "Menyimpan...";
             const payload = {
@@ -432,39 +426,11 @@
             }
         }
 
-window.addEventListener("load", () => {
-    let savedUser = sessionStorage.getItem("fz_active_user");
-    if (savedUser) {
-        currentUser = savedUser;
-        authPage.classList.add('hidden');
-        mainApp.classList.remove('hidden');
-        navTopContainer.classList.remove('hidden');
-    }
-});
-
-// HAPUS SEMUA BARIS TEKS INI DI BAWAH </html> :
-// HAPUS TOTAL BARIS INI (Baris 445 sampai 456 di file Anda):
-// // MEMUAT DATA KUNCIAN AGAR TIDAK HILANG SAAT REFRESH
-let localIDR = localStorage.getItem('saved_saldo_awal_idr') || 0;
-let localUSD = localStorage.getItem('saved_saldo_awal_usd') || 0;
-
-document.getElementById('input-saldo-awal-idr').value = localIDR;
-document.getElementById('input-saldo-awal-usd').value = localUSD;
-
-// // Menghitung ulang saldo saat pertama kali aplikasi dibuka
-if (typeof ambilDataDariCloud === 'function') {
-    ambilDataDariCloud();
-}
-window.addEventListener("load", () => {
-    let savedUser = sessionStorage.getItem("fz_active_user");
-    if (savedUser) {
-        currentUser = savedUser;
-        authPage.classList.add('hidden');
-        mainApp.classList.remove('hidden');
-        navTopContainer.classList.remove('hidden');
-    }
-});
-</script>
+        window.addEventListener("load", () => {
+            let savedUser = sessionStorage.getItem("fz_active_user");
+            if (savedUser) { currentUser = savedUser; authPage.classList.add('hidden'); mainApp.classList.remove('hidden'); navTopContainer.classList.remove('hidden'); aturTampilanDashboard(); ambilDataDariCloud(); }
+        });
+    </script>
 </body>
 </html>
 
