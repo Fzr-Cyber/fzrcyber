@@ -375,24 +375,11 @@
             } catch(e) { return String(rawDate).substring(0, 10); }
         }
 
-        // ========================================================
-        // KODE UTAMA AGAR KALKULASI SALDO OTOMATIS SAAT DIINPUT DI WEB
-        // ========================================================
-        
-        // Memicu perhitungan ulang otomatis setiap kali angka Saldo Awal IDR diketik
-        if (document.getElementById('saldo-awal-idr')) {
-            document.getElementById('saldo-awal-idr').addEventListener('input', () => {
-                if (typeof renderData === 'function') renderData();
-            });
+        function formatUang(nilai, jenisMataUang) {
+            let angka = parseFloat(nilai) || 0;
+            if (jenisMataUang === "USD") return "$ " + angka.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            return "Rp " + parseInt(angka).toLocaleString('id-ID');
         }
-
-        // Memicu perhitungan ulang otomatis setiap kali angka Saldo Awal USD diketik
-        if (document.getElementById('saldo-awal-usd')) {
-            document.getElementById('saldo-awal-usd').addEventListener('input', () => {
-                if (typeof renderData === 'function') renderData();
-            });
-        }
-
 
         function tampilkanTabel() {
             let incomeIDR = 0, incomeUSD = 0; let expenseIDR = 0, expenseUSD = 0; transactionList.innerHTML = '';
@@ -446,4 +433,5 @@
     </script>
 </body>
 </html>
+
 
