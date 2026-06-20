@@ -467,12 +467,12 @@ function hitungSaldoAkhir() {
     document.getElementById("total-ending").innerHTML = 
         `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
 }
-const LINK_GOOGLE_SHEETS_ANDA = "MASUKKAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT_ANDA_DI_SINI";
+const LINK_GOOGLE_SHEETS_ANDA = "https://script.google.com/macros/s/AKfycbyfNxG0uPGSpXg7lDQk5EggO02exelepJgzwZIeOWMWw_t9jXgNBnl2AM1jBgERrjVRvQ/exec";
 
 async function muatSaldoDariDatabaseServer() {
     try {
         let username = dapatkanUserAktif();
-        let response = await fetch(`${https://script.google.com/macros/s/AKfycbyfNxG0uPGSpXg7lDQk5EggO02exelepJgzwZIeOWMWw_t9jXgNBnl2AM1jBgERrjVRvQ/exec}?req=get_saldo_awal&username=${encodeURIComponent(username)}`); 
+        let response = await fetch(`https://google.com{encodeURIComponent(username)}`); 
         if (response.ok) {
             let data = await response.json();
             if (data.saldo_idr !== undefined) document.getElementById("input-saldo-awal-idr").value = data.saldo_idr;
@@ -490,7 +490,7 @@ function simpanSaldoKeDatabaseServer() {
         let usd = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
         let username = dapatkanUserAktif();
         try {
-            await fetch(LINK_GOOGLE_SHEETS_ANDA, {
+            await fetch(`https://google.com`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain' }, 
                 body: JSON.stringify({ 
@@ -500,24 +500,21 @@ function simpanSaldoKeDatabaseServer() {
                     saldo_usd: usd 
                 })
             });
+            console.log("Sukses terkirim!");
         } catch (error) { console.error(error); }
     }, 800);
 }
 
-// Menghubungkan fungsi ke elemen input HTML Anda
 document.addEventListener("DOMContentLoaded", () => {
     let inputIDR = document.getElementById("input-saldo-awal-idr");
     let inputUSD = document.getElementById("input-saldo-awal-usd");
-    
     if(inputIDR && inputUSD) {
         let simpananIDR = localStorage.getItem("app_saldoAwalIDR");
         let simpananUSD = localStorage.getItem("app_saldoAwalUSD");
         if (simpananIDR !== null) inputIDR.value = simpananIDR;
         if (simpananUSD !== null) inputUSD.value = simpananUSD;
-
         hitungSaldoAkhir();
         muatSaldoDariDatabaseServer();
-
         inputIDR.addEventListener("input", () => { hitungSaldoAkhir(); simpanSaldoKeDatabaseServer(); });
         inputUSD.addEventListener("input", () => { hitungSaldoAkhir(); simpanSaldoKeDatabaseServer(); });
     }
