@@ -10,11 +10,11 @@
         .container { max-width: 1100px; margin: 0 auto; }
         
         /* DESAIN MENU DROPDOWN BARU DI BAGIAN ATAS */
-        .navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px;[...]}
+        .navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; }
         .dropdown { position: relative; display: inline-block; }
         .dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         .dropbtn:hover { background-color: #4338ca; }
-        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: [...];}
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: 5px; }
         .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; transition: 0.2s; }
         .dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
         .dropdown:hover .dropdown-content { display: block; }
@@ -48,9 +48,6 @@
         .auth-container { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .auth-toggle { text-align: center; margin-top: 15px; font-size: 14px; color: #4f46e5; cursor: pointer; }
         .hidden { display: none !important; }
-
-        /* sembunyikan kolom input saldo awal (visual) */
-        #input-card { display: none !important; }
 
         .admin-badge { background-color: #4f46e5; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
         .currency-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; }
@@ -106,6 +103,7 @@
 
         <div class="grid">
             <div class="card" id="input-card">
+                <h3 style="margin-top:0; margin-bottom:15px;">Input Saldo Awal</h3>
                 <form id="finance-form">
                     <div class="form-group">
                         <label>Jenis</label>
@@ -138,20 +136,20 @@
                 <div class="summary-box">
                     <div class="card-income">
                         <small id="income-label">Total Pemasukan</small>
-                        <p id="total-income" class="card-amount">IDR 0<br>USD 0</p>
+                        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
                     </div>
                     <div class="card-expense">
                         <small id="expense-label">Total Pengeluaran</small>
-                        <p id="total-expense" class="card-amount">IDR 0<br>USD 0</p>
+                        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
                     </div>
                     <div class="card-ending">
                         <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
-                        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">IDR 0<br>USD 0</p>
+                        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
                     </div>
                 </div>
 
                 <div class="card" style="width: 100%;">
-                    <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Memuat riwayat database...</h3>
+                    <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Transaksi Database</h3>
                     <table>
                         <thead>
                             <tr id="table-header-row">
@@ -211,7 +209,352 @@
         const adminLogCard = document.getElementById('admin-log-card');
         const adminControlCard = document.getElementById('admin-control-card');
         const userListAdmin = document.getElementById('user-list-admin');
-        [...]
+
+        // Daftar kategori untuk setiap jenis
+        const categories = {
+            'Pemasukan': ['Gaji', 'Bonus', 'Freelance', 'Investasi', 'Lainnya'],
+            'Pengeluaran': ['Makanan', 'Transport', 'Hiburan', 'Belanja', 'Tagihan', 'Lainnya']
+        };
+
+        let currentUser = null;
+        let isAdmin = false;
+        let isLoginMode = true;
+
+        // Set tanggal hari ini
+        document.getElementById('date').valueAsDate = new Date();
+
+        // Ubah kategori berdasarkan jenis
+        typeSelect.addEventListener('change', () => {
+            categorySelect.innerHTML = '';
+            categories[typeSelect.value].forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categorySelect.appendChild(option);
+            });
+        });
+        typeSelect.dispatchEvent(new Event('change'));
+
+        // Auth Toggle
+        authToggle.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            authTitle.textContent = isLoginMode ? 'FZRCyber - Masuk' : 'FZRCyber - Daftar';
+            btnAuth.textContent = isLoginMode ? 'Masuk Sekarang' : 'Daftar Sekarang';
+            authToggle.textContent = isLoginMode ? 'Belum punya akun? Daftar di sini' : 'Sudah punya akun? Masuk di sini';
+        });
+
+        // Submit Form Auth
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value.trim();
+
+            if (!username || !password) {
+                alert('Username dan password harus diisi!');
+                return;
+            }
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: isLoginMode ? 'login' : 'register',
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentUser = username;
+                    isAdmin = result.isAdmin || false;
+                    loginSuccess();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Gagal terhubung ke server: ' + error.message);
+            }
+        });
+
+        function loginSuccess() {
+            authPage.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            document.getElementById('nav-top-container').classList.remove('hidden');
+            
+            userDisplay.textContent = 'Login sebagai ID: ' + currentUser;
+            
+            if (isAdmin) {
+                userDisplay.innerHTML += ' <span class="admin-badge">ADMIN</span>';
+                adminControlCard.classList.remove('hidden');
+                adminLogCard.classList.remove('hidden');
+                document.getElementById('th-action').classList.remove('hidden');
+            }
+
+            loadAllData();
+        }
+
+        // Submit Form Transaksi
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const newTransaction = {
+                date: document.getElementById('date').value,
+                type: typeSelect.value,
+                category: categorySelect.value,
+                description: document.getElementById('description').value,
+                currency: currencySelect.value,
+                amount: parseFloat(document.getElementById('amount').value)
+            };
+
+            if (!newTransaction.description || newTransaction.amount <= 0) {
+                alert('Semua field harus diisi dengan benar!');
+                return;
+            }
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'save_transaction',
+                        username: currentUser,
+                        transaction: newTransaction
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Reset form
+                    form.reset();
+                    document.getElementById('date').valueAsDate = new Date();
+                    typeSelect.dispatchEvent(new Event('change'));
+                    
+                    // Reload data
+                    loadAllData();
+                    alert('Transaksi berhasil disimpan!');
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Gagal menyimpan transaksi: ' + error.message);
+            }
+        });
+
+        async function loadAllData() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=get_transactions&username=${encodeURIComponent(currentUser)}`);
+                const result = await response.json();
+
+                if (result.success && result.transactions) {
+                    displayTransactions(result.transactions);
+                    calculateSummary(result.transactions);
+                }
+
+                if (isAdmin) {
+                    loadAdminData();
+                    loadActivityLog();
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function displayTransactions(transactions) {
+            transactionList.innerHTML = '';
+            
+            if (transactions.length === 0) {
+                transactionList.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada transaksi</td></tr>';
+                return;
+            }
+
+            transactions.forEach((tx, index) => {
+                const row = document.createElement('tr');
+                const amountClass = tx.type === 'Pemasukan' ? 'text-income' : 'text-expense';
+                const symbol = tx.currency === 'IDR' ? 'Rp' : '$';
+                
+                row.innerHTML = `
+                    <td>${tx.date}</td>
+                    <td>${tx.category}</td>
+                    <td>${tx.description}</td>
+                    <td class="${amountClass}">${symbol} ${tx.amount.toLocaleString()}</td>
+                    <td style="text-align: center;" ${isAdmin ? '' : 'class="hidden"'}>
+                        <button class="btn-delete" onclick="deleteTransaction(${index})">Hapus</button>
+                    </td>
+                `;
+                transactionList.appendChild(row);
+            });
+        }
+
+        function calculateSummary(transactions) {
+            let incomeIdr = 0, incomeUsd = 0, expenseIdr = 0, expenseUsd = 0;
+
+            transactions.forEach(tx => {
+                if (tx.type === 'Pemasukan') {
+                    if (tx.currency === 'IDR') incomeIdr += tx.amount;
+                    else incomeUsd += tx.amount;
+                } else {
+                    if (tx.currency === 'IDR') expenseIdr += tx.amount;
+                    else expenseUsd += tx.amount;
+                }
+            });
+
+            const endingIdr = incomeIdr - expenseIdr;
+            const endingUsd = incomeUsd - expenseUsd;
+
+            document.getElementById('total-income').innerHTML = `Rp ${incomeIdr.toLocaleString()}<br>$ ${incomeUsd.toLocaleString()}`;
+            document.getElementById('total-expense').innerHTML = `Rp ${expenseIdr.toLocaleString()}<br>$ ${expenseUsd.toLocaleString()}`;
+            document.getElementById('total-ending').innerHTML = `Rp ${endingIdr.toLocaleString()}<br>$ ${endingUsd.toLocaleString()}`;
+        }
+
+        async function deleteTransaction(index) {
+            if (!isAdmin) {
+                alert('Hanya admin yang bisa menghapus transaksi!');
+                return;
+            }
+
+            if (!confirm('Yakin ingin menghapus transaksi ini?')) return;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'delete_transaction',
+                        username: currentUser,
+                        index: index
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    loadAllData();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Gagal menghapus: ' + error.message);
+            }
+        }
+
+        async function loadAdminData() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=get_all_users`);
+                const result = await response.json();
+
+                if (result.success && result.users) {
+                    userListAdmin.innerHTML = '';
+                    result.users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.username} ${user.isAdmin ? '<span class="admin-badge">ADMIN</span>' : ''}</td>
+                            <td>${'*'.repeat(user.password.length)}</td>
+                            <td style="text-align: center;">
+                                <button class="btn-delete" onclick="deleteUser('${user.username}')">Hapus</button>
+                            </td>
+                        `;
+                        userListAdmin.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading admin data:', error);
+            }
+        }
+
+        async function deleteUser(username) {
+            if (!confirm(`Yakin ingin menghapus user ${username}?`)) return;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'delete_user',
+                        username: username,
+                        admin: currentUser
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    loadAdminData();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Gagal menghapus user: ' + error.message);
+            }
+        }
+
+        async function loadActivityLog() {
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=get_activity_log`);
+                const result = await response.json();
+
+                if (result.success && result.logs) {
+                    const logList = document.getElementById('log-list');
+                    logList.innerHTML = '';
+                    
+                    if (result.logs.length === 0) {
+                        logList.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada aktivitas login</td></tr>';
+                        return;
+                    }
+
+                    result.logs.forEach(log => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${log.username}</td>
+                            <td>${new Date(log.timestamp).toLocaleString('id-ID')}</td>
+                            <td style="color: #059669; font-weight: bold;">${log.status}</td>
+                        `;
+                        logList.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading activity log:', error);
+            }
+        }
+
+        async function bersihkanSemuaLogCloud() {
+            if (!confirm('Yakin ingin menghapus semua log aktivitas?')) return;
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'clear_logs',
+                        admin: currentUser
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    loadActivityLog();
+                    alert('Semua log telah dihapus!');
+                }
+            } catch (error) {
+                alert('Gagal menghapus log: ' + error.message);
+            }
+        }
+
+        function keluarAkun() {
+            if (confirm('Yakin ingin keluar?')) {
+                currentUser = null;
+                isAdmin = false;
+                authPage.classList.remove('hidden');
+                mainApp.classList.add('hidden');
+                document.getElementById('nav-top-container').classList.add('hidden');
+                authForm.reset();
+                isLoginMode = true;
+                authTitle.textContent = 'FZRCyber - Masuk';
+                btnAuth.textContent = 'Masuk Sekarang';
+                authToggle.textContent = 'Belum punya akun? Daftar di sini';
+            }
+        }
     </script>
 </body>
 </html>
