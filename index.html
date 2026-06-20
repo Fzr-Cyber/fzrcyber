@@ -402,9 +402,24 @@
                     transactionList.appendChild(r);
                 });
             }
-            document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
-            document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
-        }
+        document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
+        document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
+
+        // ========================================================
+        // RUMUS PERHITUNGAN SALDO AKHIR UTAMA (DITAMBAHKAN)
+        // ========================================================
+        const saldoAwalIDR = parseFloat(document.getElementById('saldo-awal-idr')?.value) || 0;
+        const saldoAwalUSD = parseFloat(document.getElementById('saldo-awal-usd')?.value) || 0;
+
+        const saldoAkhirIDR = saldoAwalIDR + incomeIDR - expenseIDR;
+        const saldoAkhirUSD = saldoAwalUSD + incomeUSD - expenseUSD;
+
+        document.getElementById('saldo-akhir-display').innerHTML = `IDR ${saldoAkhirIDR.toLocaleString('id-ID')}<br>USD ${saldoAkhirUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+    }
+
+    // Tambahan pemicu otomatis agar langsung menghitung saat angka saldo awal diketik di web
+    document.getElementById('saldo-awal-idr')?.addEventListener('input', ambilDataDariCloud);
+    document.getElementById('saldo-awal-usd')?.addEventListener('input', ambilDataDariCloud);
 
         form.addEventListener('submit', e => {
             e.preventDefault(); btnSubmit.disabled = true; btnSubmit.textContent = "Menyimpan...";
