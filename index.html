@@ -160,6 +160,40 @@
 </div> <!-- PENUTUP KONTANER UTAMA -->
 
 <script>
+// --- TAMBAHAN BARU: FUNGSI SINKRONISASI DATABASE SERVER PC & HP ---
+async function muatSaldoDariDatabaseServer() {
+    try {
+        let response = await fetch('/api/get-saldo-awal'); 
+        if (response.ok) {
+            let data = await response.json();
+            if(data.saldo_idr !== undefined) document.getElementById("input-saldo-awal-idr").value = data.saldo_idr;
+            if(data.saldo_usd !== undefined) document.getElementById("input-saldo-awal-usd").value = data.saldo_usd;
+            hitungSaldoAkhir();
+        }
+    } catch (error) {
+        console.error("Gagal memuat saldo awal dari database cloud:", error);
+    }
+}
+
+let timeoutSimpanCloud;
+function simpanSaldoKeDatabaseServer() {
+    clearTimeout(timeoutSimpanCloud);
+    timeoutSimpanCloud = setTimeout(async () => {
+        let idr = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
+        let usd = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
+        try {
+            await fetch('/api/save-saldo-awal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ saldo_idr: idr, saldo_usd: usd })
+            });
+        } catch (error) {
+            console.error("Gagal sinkronisasi data ke cloud database:", error);
+        }
+    }, 500);
+}
+// ------------------------------------------------------------------
+
 function hitungSaldoAkhir() {
     let inputIDR = document.getElementById("input-saldo-awal-idr");
     let inputUSD = document.getElementById("input-saldo-awal-usd");
@@ -203,6 +237,10 @@ window.addEventListener("DOMContentLoaded", function() {
     // Hitung kalkulasi angka display
     hitungSaldoAkhir();
     
+    // --- TAMBAHAN BARU: Menarik data cloud saat login di HP / PC baru ---
+    muatSaldoDariDatabaseServer();
+    // ------------------------------------------------------------------
+    
     // PENTING: Jika Anda memiliki fungsi bawaan pengecekan login admin, jalankan di bawah ini agar tidak logout:
     if (typeof cekLoginSession === "function") {
         cekLoginSession();
@@ -210,8 +248,14 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 // Jalankan kalkulator real-time setiap kali user mengetik angka baru
-document.getElementById("input-saldo-awal-idr").addEventListener("input", hitungSaldoAkhir);
-document.getElementById("input-saldo-awal-usd").addEventListener("input", hitungSaldoAkhir);
+document.getElementById("input-saldo-awal-idr").addEventListener("input", function() {
+    hitungSaldoAkhir();
+    simpanSaldoKeDatabaseServer(); // --- TAMBAHAN BARU ---
+});
+document.getElementById("input-saldo-awal-usd").addEventListener("input", function() {
+    hitungSaldoAkhir();
+    simpanSaldoKeDatabaseServer(); // --- TAMBAHAN BARU ---
+});
 </script>
 
   
