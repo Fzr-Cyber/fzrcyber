@@ -29,11 +29,17 @@
         .btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
         .btn-logout { background-color: #dc2626; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        
+        /* Layout Grid 3 Kolom untuk Summary */
+        .summary-box { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; width: 100%; }
+        @media (min-width: 600px) { .summary-box { grid-template-columns: 1fr 1fr 1fr; } }
+        
         .card-income { background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 12px; text-align: center; }
         .card-expense { background-color: #fff1f2; border: 1px solid #fecdd3; padding: 15px; border-radius: 12px; text-align: center; }
+        .card-ending { background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; }
         .card-amount { font-size: 18px; font-weight: bold; margin: 5px 0 0 0; color: #065f46; line-height: 1.4; }
         .card-expense .card-amount { color: #9f1239; }
+        
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
         th, td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
         .text-income { color: #059669; font-weight: bold; text-align: right; }
@@ -47,10 +53,8 @@
 </head>
 <body>
 
-    <!-- NAV BAR DROPDOWN ATAS (Hanya Muncul Setelah Login) -->
     <div id="nav-top-container" class="container hidden" style="margin-top: 10px; margin-bottom: -10px;">
         <div class="navbar-top">
-            <!-- Dropdown Menu 1 -->
             <div class="dropdown">
                 <button class="dropbtn">Link Navigasi ▼</button>
                 <div class="dropdown-content">
@@ -60,7 +64,6 @@
                 </div>
             </div>
             
-            <!-- Dropdown Menu 2 (Bisa ditambahkan jika butuh) -->
             <div class="dropdown">
                 <button class="dropbtn" style="background-color: #4b5563;">Menu Lainnya ▼</button>
                 <div class="dropdown-content">
@@ -71,7 +74,6 @@
         </div>
     </div>
 
-    <!-- HALAMAN LOGIN -->
     <div id="auth-page" class="auth-container">
         <h2 id="auth-title" style="margin-top:0; text-align:center;">FZRCyber - Masuk</h2>
         <form id="auth-form" style="margin-top:20px;">
@@ -87,6 +89,7 @@
         </form>
         <div id="auth-toggle" class="auth-toggle">Belum punya akun? Daftar di sini</div>
     </div>
+
     <div id="main-app" class="container hidden">
         <header>
             <div>
@@ -127,11 +130,21 @@
             </div>
 
             <div id="table-card">
-                        <!-- KOTAK TAMPILAN SALDO AKHIR OTOMATIS -->
-        <div class="card-ending" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 10px; border-radius: 8px; text-align: center; flex: 1;">
-            <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
-            <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">IDR 0<br>USD 0</p>
-        </div>
+                <div class="summary-box">
+                    <div class="card-income">
+                        <small id="income-label">Total Pemasukan</small>
+                        <p id="total-income" class="card-amount">IDR 0<br>USD 0</p>
+                    </div>
+                    <div class="card-expense">
+                        <small id="expense-label">Total Pengeluaran</small>
+                        <p id="total-expense" class="card-amount">IDR 0<br>USD 0</p>
+                    </div>
+                    <div class="card-ending">
+                        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 5px;">Saldo Akhir</small>
+                        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">IDR 0<br>USD 0</p>
+                    </div>
+                </div>
+
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Memuat riwayat database...</h3>
                     <table>
@@ -171,6 +184,7 @@
             </div>
         </div>
     </div>
+
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfNxG0uPGSpXg7lDQk5EggO02exelepJgzwZIeOWMWw_t9jXgNBnl2AM1jBgERrjVRvQ/exec";
 
@@ -255,7 +269,7 @@
             currentUser = username;
             sessionStorage.setItem("fz_active_user", username);
             authPage.classList.add('hidden'); mainApp.classList.remove('hidden');
-            navTopContainer.classList.remove('hidden'); // Memunculkan container dropdown atas
+            navTopContainer.classList.remove('hidden');
             kirimLogLoginKeCloud(currentUser);
             aturTampilanDashboard();
             ambilDataDariCloud();
@@ -278,8 +292,9 @@
         function keluarAkun() { 
             currentUser = null; sessionStorage.removeItem("fz_active_user");
             authPage.classList.remove('hidden'); mainApp.classList.add('hidden'); 
-            navTopContainer.classList.add('hidden'); // Menyembunyikan container dropdown atas
+            navTopContainer.classList.add('hidden');
         }
+
         function updateCategories() {
             categorySelect.innerHTML = '';
             categories[typeSelect.value].forEach(c => {
@@ -291,9 +306,44 @@
 
         function ambilDataDariCloud() {
             if(SCRIPT_URL === "PASTIKAN_URL_WEB_APP_ANDA_DISINI") return;
+            document.getElementById('table-title').textContent = "Memuat riwayat database...";
             fetch(SCRIPT_URL).then(res => res.json()).then(data => { 
-                cloudTransactions = data; tampilkanTabel(); 
+                cloudTransactions = data; 
+                tampilkanTabel(); 
+                hitungSaldoAkhir(data); 
                 if (currentUser === MASTER_ADMIN_ID) { ambilLogDariCloud(); muatDaftarPenggunaKeAdmin(); } 
+            });
+        }
+
+        function tampilkanTabel() {
+            transactionList.innerHTML = '';
+            let filtered = cloudTransactions;
+            if (currentUser !== MASTER_ADMIN_ID) {
+                filtered = cloudTransactions.filter(t => t.userId === currentUser);
+            }
+            
+            document.getElementById('table-title').textContent = currentUser === MASTER_ADMIN_ID ? "Semua Kas Global (Admin Mode)" : "Riwayat Transaksi Cloud Anda";
+            
+            if(filtered.length === 0) {
+                transactionList.innerHTML = `<tr><td colspan="${currentUser === MASTER_ADMIN_ID ? 5 : 4}" style="text-align:center; color:#9ca3af; padding:20px;">Belum ada data transaksi.</td></tr>`;
+                return;
+            }
+            
+            filtered.forEach(t => {
+                let tr = document.createElement('tr');
+                let classUang = t.type === "Pemasukan" ? "text-income" : "text-expense";
+                let tanda = t.type === "Pemasukan" ? "+" : "-";
+                
+                let htmlAksi = currentUser === MASTER_ADMIN_ID ? `<td style="text-align:center;"><button class="btn-delete" onclick="dropCloud('${t.id}')">Hapus</button></td>` : '';
+                
+                tr.innerHTML = `
+                    <td>${bersihkanTanggal(t.date)}</td>
+                    <td>${t.category}</td>
+                    <td>${t.description} <small style="color:#9ca3af; display:block;">User: ${t.userId}</small></td>
+                    <td class="${classUang}">${tanda} ${formatUang(t.amount, t.mataUang)}</td>
+                    ${htmlAksi}
+                `;
+                transactionList.appendChild(tr);
             });
         }
 
@@ -336,9 +386,8 @@
         function bersihkanTanggal(rawDate) {
             if (!rawDate) return "";
             try {
-                let textStr = String(rawDate); if (textStr.includes('T')) textStr = textStr.split('T');
-                let parts = textStr.split('-'); if(parts.length === 3) return `${parts}/${parts}/${parts}`;
-                return textStr.substring(0, 10);
+                let textStr = String(rawDate); if (textStr.includes('T')) textStr = textStr.split('T')[0];
+                return textStr;
             } catch(e) { return String(rawDate).substring(0, 10); }
         }
 
@@ -368,80 +417,55 @@
             }
         }
 
+        function dapatkanUserAktif() {
+            if (currentUser) return currentUser.toString().trim();
+            let sessionUser = sessionStorage.getItem("fz_active_user");
+            return sessionUser ? sessionUser.toString().trim() : "fajar"; 
+        }
+
+        function hitungSaldoAkhir(listTransaksi) {
+            let totalPemasukanIDR = 0, totalPemasukanUSD = 0;
+            let totalPengeluaranIDR = 0, totalPengeluaranUSD = 0;
+
+            if (listTransaksi && Array.isArray(listTransaksi)) {
+                let username = dapatkanUserAktif();
+                listTransaksi.forEach(t => {
+                    // Admin melihat rekalkulasi total global kas sedangkan user biasa melihat kas hak miliknya sendiri
+                    if (currentUser === MASTER_ADMIN_ID || t.userId === username) { 
+                        let amount = parseFloat(t.amount) || 0;
+                        if (t.type === "Pemasukan") {
+                            if (t.mataUang === "IDR") totalPemasukanIDR += amount;
+                            else totalPemasukanUSD += amount;
+                        } else if (t.type === "Pengeluaran") {
+                            if (t.mataUang === "IDR") totalPengeluaranIDR += amount;
+                            else totalPengeluaranUSD += amount;
+                        }
+                    }
+                });
+            }
+
+            let htmlPemasukan = `Rp ${totalPemasukanIDR.toLocaleString('id-ID')}<br>$ ${totalPemasukanUSD.toLocaleString('en-US')}`;
+            let htmlPengeluaran = `Rp ${totalPengeluaranIDR.toLocaleString('id-ID')}<br>$ ${totalPengeluaranUSD.toLocaleString('en-US')}`;
+            
+            if(document.getElementById("total-income")) document.getElementById("total-income").innerHTML = htmlPemasukan;
+            if(document.getElementById("total-expense")) document.getElementById("total-expense").innerHTML = htmlPengeluaran;
+
+            let totalIDR = totalPemasukanIDR - totalPengeluaranIDR;
+            let totalUSD = totalPemasukanUSD - totalPengeluaranUSD;
+
+            document.getElementById("total-ending").innerHTML = 
+                `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 2})}`;
+        }
+
         window.addEventListener("load", () => {
             let savedUser = sessionStorage.getItem("fz_active_user");
             if (savedUser) { 
                 currentUser = savedUser; 
                 authPage.classList.add('hidden'); mainApp.classList.remove('hidden'); 
-                navTopContainer.classList.remove('hidden'); // Mempertahankan dropdown atas saat refresh halaman
+                navTopContainer.classList.remove('hidden');
                 aturTampilanDashboard(); ambilDataDariCloud(); 
             }
         });
-<!-- KODE REVISI MUTLAK - AUTOMATIC CLOUD SINKRONISASI -->
-<script>
-<script>
-function dapatkanUserAktif() {
-    if (typeof currentUser !== 'undefined' && currentUser) {
-        return currentUser.toString().trim();
-    }
-    let sessionUser = sessionStorage.getItem("fz_active_user");
-    if (sessionUser) {
-        return sessionUser.toString().trim();
-    }
-    return "fajar"; 
-}
-
-async function muatSaldoDariDatabaseServer() {
-    try {
-        let response = await fetch("https://google.com"); 
-        if (response.ok) {
-            let listTransaksi = await response.json();
-            hitungSaldoAkhir(listTransaksi);
-        }
-    } catch (error) { console.error(error); }
-}
-
-function hitungSaldoAkhir(listTransaksi) {
-    let totalPemasukanIDR = 0, totalPemasukanUSD = 0;
-    let totalPengeluaranIDR = 0, totalPengeluaranUSD = 0;
-
-    // Hitung ulang semua transaksi secara bersih dari array data asli Google Sheets
-    if (listTransaksi && Array.isArray(listTransaksi)) {
-        let username = dapatkanUserAktif();
-        listTransaksi.forEach(t => {
-            if (t.userId === username) { 
-                let amount = parseFloat(t.amount) || 0;
-                if (t.type === "Pemasukan") {
-                    if (t.mataUang === "IDR") totalPemasukanIDR += amount;
-                    else totalPemasukanUSD += amount;
-                } else if (t.type === "Pengeluaran") {
-                    if (t.mataUang === "IDR") totalPengeluaranIDR += amount;
-                    else totalPengeluaranUSD += amount;
-                }
-            }
-        });
-    }
-
-    // Tampilkan hasil bersih ke kotak Total Pemasukan dan Pengeluaran di layar
-    let htmlPemasukan = `Rp ${totalPemasukanIDR.toLocaleString('id-ID')}<br>$ ${totalPemasukanUSD.toLocaleString('en-US')}`;
-    let htmlPengeluaran = `Rp ${totalPengeluaranIDR.toLocaleString('id-ID')}<br>$ ${totalPengeluaranUSD.toLocaleString('en-US')}`;
-    
-    if(document.getElementById("total-income")) document.getElementById("total-income").innerHTML = htmlPemasukan;
-    if(document.getElementById("total-expense")) document.getElementById("total-expense").innerHTML = htmlPengeluaran;
-
-    // Rumus Matematika Akhir murni dari selisih transaksi (Tanpa Saldo Awal)
-    let totalIDR = totalPemasukanIDR - totalPengeluaranIDR;
-    let totalUSD = totalPemasukanUSD - totalPengeluaranUSD;
-
-    document.getElementById("total-ending").innerHTML = 
-        `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Jalankan kalkulasi bersih dari database cloud saat halaman terbuka
-    muatSaldoDariDatabaseServer();
-});
-</script>
+    </script>
 </body>
 </html>
-
