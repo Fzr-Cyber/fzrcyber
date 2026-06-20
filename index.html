@@ -9,17 +9,17 @@
         body { background-color: #f3f4f6; padding: 20px; color: #333; margin: 0; }
         .container { max-width: 1100px; margin: 0 auto; }
         
-		.navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; align-items: center; }
+        .navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; }
         .dropdown { position: relative; display: inline-block; }
         .dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         .dropbtn:hover { background-color: #4338ca; }
-        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: 5px; overflow: hidden; }
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: 5px; }
         .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; transition: 0.2s; }
         .dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
         .dropdown:hover .dropdown-content { display: block; }
 
         header { text-align: center; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
         @media (min-width: 768px) { .grid { grid-template-columns: 350px 1fr; } }
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: fit-content; margin-bottom: 20px; }
         .form-group { margin-bottom: 15px; }
@@ -28,7 +28,7 @@
         .btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
         .btn-logout { background-color: #dc2626; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .summary-box { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .card-income { background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 12px; text-align: center; }
         .card-expense { background-color: #fff1f2; border: 1px solid #fecdd3; padding: 15px; border-radius: 12px; text-align: center; }
         .card-amount { font-size: 18px; font-weight: bold; margin: 5px 0 0 0; color: #065f46; line-height: 1.4; }
@@ -45,11 +45,8 @@
     </style>
 </head>
 <body>
-
-    <!-- NAV BAR DROPDOWN ATAS (Hanya Muncul Setelah Login) -->
     <div id="nav-top-container" class="container hidden" style="margin-top: 10px; margin-bottom: -10px;">
         <div class="navbar-top">
-            <!-- Dropdown Menu 1 -->
             <div class="dropdown">
                 <button class="dropbtn">Link Navigasi ▼</button>
                 <div class="dropdown-content">
@@ -58,8 +55,6 @@
                     <a href="#" onclick="alert('Fitur Laporan Segera Datang!')">Laporan Tahunan</a>
                 </div>
             </div>
-            
-            <!-- Dropdown Menu 2 (Bisa ditambahkan jika butuh) -->
             <div class="dropdown">
                 <button class="dropbtn" style="background-color: #4b5563;">Menu Lainnya ▼</button>
                 <div class="dropdown-content">
@@ -70,7 +65,6 @@
         </div>
     </div>
 
-    <!-- HALAMAN LOGIN -->
     <div id="auth-page" class="auth-container">
         <h2 id="auth-title" style="margin-top:0; text-align:center;">FZRCyber - Masuk</h2>
         <form id="auth-form" style="margin-top:20px;">
@@ -86,6 +80,7 @@
         </form>
         <div id="auth-toggle" class="auth-toggle">Belum punya akun? Daftar di sini</div>
     </div>
+
     <div id="main-app" class="container hidden">
         <header>
             <div>
@@ -126,170 +121,21 @@
             </div>
 
             <div id="table-card">
+                <div class="summary-box">
+                    <div class="card-income">
+                        <small id="income-label">Total Pemasukan</small>
+                        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
+                    </div>
+                    <div class="card-expense">
+                        <small id="expense-label">Total Pengeluaran</small>
+                        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
+                    </div>
+                    <div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center;">
+                        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
+                        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
+                    </div>
+                </div>
 
-<!-- KONTANER UTAMA AGAR SEBARIS KE SAMPING -->
-<div style="display: flex; flex-direction: row; gap: 15px; align-items: stretch; margin-bottom: 20px; width: 100%;">
-
-    <!-- KOLOM 1: INPUT SALDO AWAL -->
-    <div class="card" style="flex: 1; background-color: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; text-align: center;">
-        <small style="color: #1e40af; font-weight: 600; display: block; margin-bottom: 8px;">Input Saldo Awal</small>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-            <input type="number" id="input-saldo-awal-idr" placeholder="IDR (Rp)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
-            <input type="number" step="any" id="input-saldo-awal-usd" placeholder="USD ($)" value="0" style="width: 100%; padding: 6px 10px; border: 1px solid #bfdbfe; border-radius: 6px; text-align: center; font-size: 14px; box-sizing: border-box;">
-        </div>
-    </div>
-
-    <!-- KOLOM 2: TOTAL PEMASUKAN -->
-    <div class="card-income" style="flex: 1; background-color: #e6f4ea; border: 1px solid #34a853; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
-        <small id="income-label" style="color: #137333; font-weight: 600; display: block; margin-bottom: 8px;">Total Pemasukan</small>
-        <p id="total-income" class="card-amount" style="color: #137333; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
-    </div>
-
-    <!-- KOLOM 3: TOTAL PENGELUARAN -->
-    <div class="card-expense" style="flex: 1; background-color: #fce8e6; border: 1px solid #ea4335; padding: 15px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; text-align: center;">
-        <small id="expense-label" style="color: #c5221f; font-weight: 600; display: block; margin-bottom: 8px;">Total Pengeluaran</small>
-        <p id="total-expense" class="card-amount" style="color: #c5221f; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
-    </div>
-
-    <!-- KOLOM 4: SALDO AKHIR -->
-    <div class="card" style="flex: 1; background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
-        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
-        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-size: 18px; font-weight: bold;">IDR 0<br>USD 0</p>
-    </div>
-
-</div> <!-- PENUTUP KONTANER UTAMA -->
-
-<script>
-// --- TAMBAHAN BARU: MENDETEKSI USERNAME & FUNGSI DOMPLENG DATABASE TRANSAKSI ---
-function dapatkanUserAktif() {
-    // Otomatis mengambil ID pengguna yang sedang login di layar (misal: "fajar")
-    let elemenUser = document.querySelector('small[style*="color"]');
-    if (elemenUser) {
-        return elemenUser.innerText.replace("Login sebagai ID:", "").replace("Login sebagai:", "").trim();
-    }
-    return "default_user";
-}
-
-async function muatSaldoDariDatabaseServer() {
-    try {
-        let userID = dapatkanUserAktif();
-        // Mengambil dari API transaksi yang sudah aktif di web Anda
-        let response = await fetch('/api/get-transaksi'); 
-        if (response.ok) {
-            let listTransaksi = await response.json();
-            
-            // Cari data saldo awal milik user yang sedang login saat ini
-            let dataIDR = listTransaksi.find(t => t.kategori === "Saldo Awal" && t.mata_uang === "IDR" && t.username === userID);
-            let dataUSD = listTransaksi.find(t => t.kategori === "Saldo Awal" && t.mata_uang === "USD" && t.username === userID);
-
-            if(dataIDR !== undefined && dataIDR.jumlah !== undefined) document.getElementById("input-saldo-awal-idr").value = dataIDR.jumlah;
-            if(dataUSD !== undefined && dataUSD.jumlah !== undefined) document.getElementById("input-saldo-awal-usd").value = dataUSD.jumlah;
-            
-            // Panggil kalkulator bawaan Anda untuk memperbarui visual layar
-            hitungSaldoAkhir();
-        }
-    } catch (error) {
-        console.error("Gagal memuat saldo awal dari database cloud:", error);
-    }
-}
-
-let timeoutSimpanCloud;
-function simpanSaldoKeDatabaseServer() {
-    clearTimeout(timeoutSimpanCloud);
-    timeoutSimpanCloud = setTimeout(async () => {
-        let idr = parseFloat(document.getElementById("input-saldo-awal-idr").value) || 0;
-        let usd = parseFloat(document.getElementById("input-saldo-awal-usd").value) || 0;
-        let userID = dapatkanUserAktif();
-
-        try {
-            // Mengirim data saldo ke database utama lewat API transaksi bawaan Anda
-            // (Sesuaikan rute '/api/simpan-transaksi' jika nama file backend Anda berbeda)
-            await fetch('/api/simpan-transaksi', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    username: userID,
-                    jenis: "Pemasukan",
-                    kategori: "Saldo Awal", 
-                    tanggal: new Date().toISOString().split('T')[0],
-                    jumlah_idr: idr,
-                    jumlah_usd: usd,
-                    keterangan: "Sinkronisasi otomatis saldo awal"
-                })
-            });
-            console.log("Saldo awal berhasil diunggah ke cloud database!");
-        } catch (error) {
-            console.error("Gagal sinkronisasi data ke cloud database:", error);
-        }
-    }, 800);
-}
-// ------------------------------------------------------------------
-
-function hitungSaldoAkhir() {
-    let inputIDR = document.getElementById("input-saldo-awal-idr");
-    let inputUSD = document.getElementById("input-saldo-awal-usd");
-
-    let saldoAwalIDR = parseFloat(inputIDR.value) || 0;
-    let saldoAwalUSD = parseFloat(inputUSD.value) || 0;
-
-    // SIMPAN DATA: Mengunci nilai input ke memori browser agar tidak hilang saat refresh
-    localStorage.setItem("app_saldoAwalIDR", inputIDR.value);
-    localStorage.setItem("app_saldoAwalUSD", inputUSD.value);
-
-    let teksPemasukan = document.getElementById("total-income").innerHTML;
-    let teksPengeluaran = document.getElementById("total-expense").innerHTML;
-
-    function ekstrakNilai(teks) {
-        let bagian = teks.split(/<br\s*\/?>/i);
-        let idr = bagian ? parseFloat(bagian[0].replace(/[^0-9.-]+/g, "")) : 0;
-        let usd = bagian && bagian[1] ? parseFloat(bagian[1].replace(/[^0-9.-]+/g, "")) : 0;
-        return { idr: isNaN(idr) ? 0 : idr, usd: isNaN(usd) ? 0 : usd };
-    }
-
-    let pemasukan = ekstrakNilai(teksPemasukan);
-    let pengeluaran = ekstrakNilai(teksPengeluaran);
-
-    let totalIDR = saldoAwalIDR + pemasukan.idr - pengeluaran.idr;
-    let totalUSD = saldoAwalUSD + pemasukan.usd - pengeluaran.usd;
-
-    document.getElementById("total-ending").innerHTML = 
-        `IDR ${totalIDR.toLocaleString('id-ID')}<br>USD ${totalUSD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 4})}`;
-}
-
-// MEMUAT DATA KEMBALI SECARA OTOMATIS SAAT REFRESH
-window.addEventListener("DOMContentLoaded", function() {
-    // Mengambil data simpanan khusus saldo awal
-    let simpananIDR = localStorage.getItem("app_saldoAwalIDR");
-    let simpananUSD = localStorage.getItem("app_saldoAwalUSD");
-
-    if (simpananIDR !== null) document.getElementById("input-saldo-awal-idr").value = simpananIDR;
-    if (simpananUSD !== null) document.getElementById("input-saldo-awal-usd").value = simpananUSD;
-
-    // Hitung kalkulasi angka display
-    hitungSaldoAkhir();
-    
-    // --- TAMBAHAN BARU: Menarik data cloud saat login di HP / PC baru ---
-    muatSaldoDariDatabaseServer();
-    // ------------------------------------------------------------------
-    
-    // PENTING: Jika Anda memiliki fungsi bawaan pengecekan login admin, jalankan di bawah ini agar tidak logout:
-    if (typeof cekLoginSession === "function") {
-        cekLoginSession();
-    }
-});
-
-// Jalankan kalkulator real-time setiap kali user mengetik angka baru
-document.getElementById("input-saldo-awal-idr").addEventListener("input", function() {
-    hitungSaldoAkhir();
-    simpanSaldoKeDatabaseServer(); // --- TAMBAHAN BARU ---
-});
-document.getElementById("input-saldo-awal-usd").addEventListener("input", function() {
-    hitungSaldoAkhir();
-    simpanSaldoKeDatabaseServer(); // --- TAMBAHAN BARU ---
-});
-</script>
-
-  
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
                     <table>
@@ -301,6 +147,7 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
                         <tbody id="transaction-list"></tbody>
                     </table>
                 </div>
+
                 <div class="card hidden" id="admin-control-card" style="width: 100%; border-top: 4px solid #b91c1c;">
                     <h3 style="margin-top:0; margin-bottom:15px; color:#b91c1c;">⚙️ Admin Control Panel (Kelola Pengguna)</h3>
                     <table>
@@ -308,6 +155,7 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
                         <tbody id="user-list-admin"></tbody>
                     </table>
                 </div>
+
                 <div class="card hidden" id="admin-log-card" style="width: 100%; border-top: 4px solid #4f46e5;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                         <h3 style="margin:0; color:#4f46e5;">📋 Log Activity (Histori Login Cloud)</h3>
@@ -321,6 +169,7 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
             </div>
         </div>
     </div>
+
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTrHgNpyTeVu_DgvlAw4LOPgA4xp4_SkEmkS9b71-LJyG52kc1Sumed4euJ4B1AKPZOQ/exec";
 
@@ -398,6 +247,7 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
                 }
             }
         });
+
         function eksekusiLoginMasuk(username) {
             currentUser = username;
             sessionStorage.setItem("fz_active_user", username);
@@ -449,7 +299,7 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
                 userListAdmin.innerHTML = ''; let ketersediaanUser = false;
                 for (let username in users) {
                     ketersediaanUser = true; let row = document.createElement('tr');
-                    row.innerHTML = `<td><strong>${username}</strong></td><td>••••••</td><td style="text-align: center;"><button class="btn-delete" onclick="hapusAkunUserCloud('${username}')">Hapus Akun</button></td>`;
+                    row.innerHTML = `<td><strong>${username}</strong></td><td>••••••</td><td style="text-align: center;"><button class="btn-delete" onclick="hapusAkunUserCloud('${username}')">Hapus</button></td>`;
                     userListAdmin.appendChild(row);
                 }
                 if(!ketersediaanUser) userListAdmin.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #9ca3af; padding: 15px;">Belum ada user mendaftar.</td></tr>`;
@@ -467,10 +317,11 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
                 fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: "bersihkan_log" }) }).then(() => { ambilLogDariCloud(); });
             }
         }
+
         function ambilLogDariCloud() {
             fetch(SCRIPT_URL + "?req=log").then(res => res.json()).then(logs => {
                 logList.innerHTML = '';
-                if(!logs || logs.length === 0) { logList.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada riwayat aktivitas login.</td></tr>`; return; }
+                if(!logs || logs.length === 0) { logList.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada riwayat aktivitas login.</td></tr>`;return; }
                 [...logs].reverse().forEach(l => {
                     let row = document.createElement('tr');
                     row.innerHTML = `<td><strong>${l.userId}</strong></td><td>${l.waktuLogin}</td><td><span class="admin-badge" style="background-color:#059669;">Berhasil Masuk</span></td>`;
@@ -482,8 +333,8 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
         function bersihkanTanggal(rawDate) {
             if (!rawDate) return "";
             try {
-                let textStr = String(rawDate); if (textStr.includes('T')) textStr = textStr.split('T');
-                let parts = textStr.split('-'); if(parts.length === 3) return `${parts}/${parts}/${parts}`;
+                let textStr = String(rawDate); if (textStr.includes('T')) textStr = textStr.split('T')[0];
+                let parts = textStr.split('-'); if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
                 return textStr.substring(0, 10);
             } catch(e) { return String(rawDate).substring(0, 10); }
         }
@@ -499,11 +350,11 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
             let filtered = currentUser === MASTER_ADMIN_ID ? [...cloudTransactions] : cloudTransactions.filter(t => t.userId === currentUser);
             
             if (currentUser === MASTER_ADMIN_ID && !document.getElementById('th-user-id')) {
-                let th = document.createElement('th'); th.id = 'th-user-id'; th.textContent = "ID User"; document.getElementById('table-header-row').insertBefore(th, document.getElementById('table-header-row').firstChild);
+                let th = document.createElement('th'); th.id = 'th-user-id'; th.textContent = "ID User"; document.getElementById('table-header-row').insertBefore(th, document.getElementById('table-header-row').children[0]);
             } else if (currentUser !== MASTER_ADMIN_ID && document.getElementById('th-user-id')) { document.getElementById('th-user-id').remove(); }
 
             if(filtered.length === 0) {
-                let cols = currentUser === MASTER_ADMIN_ID ? 5 : 4; transactionList.innerHTML = `<tr><td colspan="${cols}" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada data transaksi.</td></tr>`;
+                let cols = currentUser === MASTER_ADMIN_ID ? 5 : 4; transactionList.innerHTML = `<tr><td colspan="${cols}" style="text-align: center; color: #9ca3af; padding: 20px;">Belum ada data transaksi</td></tr>`;
             } else {
                 filtered.forEach(t => {
                     let isPem = t.type === 'Pemasukan'; let cur = t.mataUang === "USD" ? "USD" : "IDR"; let nilai = parseFloat(t.amount) || 0;
@@ -511,12 +362,13 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
                     let r = document.createElement('tr');
                     let userCol = currentUser === MASTER_ADMIN_ID ? `<td><span class="admin-badge">${t.userId}</span></td>` : '';
                     let actionCol = currentUser === MASTER_ADMIN_ID ? `<td style="text-align: center;"><button class="btn-delete" onclick="dropCloud('${t.id}')">Hapus</button></td>` : '';
-                    r.innerHTML = `${userCol}<td>${bersihkanTanggal(t.date)}</td><td>${t.category}</td><td>${t.description}</td><td class="${isPem ? 'text-income' : 'text-expense'}">${isPem ? '+' : '-'} ${formatUang(nilai, cur)}</td>${actionCol}`;
+                    r.innerHTML = `${userCol}<td>${bersihkanTanggal(t.date)}</td><td>${t.category}</td><td>${t.description}</td><td class="${isPem ? 'text-income' : 'text-expense'}">${isPem ? '+' : '-'}${formatUang(nilai, cur)}</td>${actionCol}`;
                     transactionList.appendChild(r);
                 });
             }
             document.getElementById('total-income').innerHTML = `${formatUang(incomeIDR, 'IDR')}<br>${formatUang(incomeUSD, 'USD')}`;
             document.getElementById('total-expense').innerHTML = `${formatUang(expenseIDR, 'IDR')}<br>${formatUang(expenseUSD, 'USD')}`;
+            document.getElementById('total-ending').innerHTML = `${formatUang(incomeIDR - expenseIDR, 'IDR')}<br>${formatUang(incomeUSD - expenseUSD, 'USD')}`;
         }
 
         form.addEventListener('submit', e => {
@@ -546,5 +398,3 @@ document.getElementById("input-saldo-awal-usd").addEventListener("input", functi
     </script>
 </body>
 </html>
-
-
