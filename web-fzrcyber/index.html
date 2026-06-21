@@ -260,22 +260,26 @@ td {
                     <button type="submit" id="btn-submit" class="btn-submit">Simpan Transaksi</button>
                 </form>
             </div>
-
-            <div id="table-card">
+             <div id="table-card">
+                <!-- Tiga Kotak Metrik Utama: Ukuran Seragam & Desain Elegan -->
                 <div class="summary-box">
                     <div class="card-income">
                         <small id="income-label">Total Pemasukan</small>
-                        <p id="total-income" class="card-amount">Rp 0<br>$ 0</p>
+                        <p id="total-income" class="card-amount text-prime-income">Rp 0<br>$ 0</p>
                     </div>
                     <div class="card-expense">
                         <small id="expense-label">Total Pengeluaran</small>
-                        <p id="total-expense" class="card-amount">Rp 0<br>$ 0</p>
+                        <p id="total-expense" class="card-amount text-prime-expense">Rp 0<br>$ 0</p>
                     </div>
-                    <div class="card" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center;">
-                        <small style="color: #374151; font-weight: 600; display: block; margin-bottom: 8px;">Saldo Akhir</small>
-                        <p id="total-ending" class="card-amount" style="color: #111827; margin: 0; font-weight: bold;">Rp 0<br>$ 0</p>
+                    <!-- Kotak Ketiga: Saldo Akhir Ditulis Langsung di HTML Agar Ukurannya Sama Presisi -->
+                    <div class="card-balance" style="background-color: white; border: 1px solid #e2e8f0; padding: 20px 16px; border-radius: 16px; border-left: 4px solid #3b82f6; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                        <small style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 8px; display: block;">Saldo Akhir</small>
+                        <p id="total-balance" class="card-amount" style="font-size: 18px; font-weight: 700; margin: 0; color: #1e3a8a; line-height: 1.5; letter-spacing: -0.02em;">Rp 0<br>$ 0</p>
                     </div>
                 </div>
+
+                <h3 style="margin: 25px 0 15px 0; color: #0f172a; font-weight: 700; font-size: 16px;">Riwayat Database</h3>
+
 
                 <div class="card" style="width: 100%;">
                     <h3 id="table-title" style="margin-top:0; margin-bottom:15px;">Riwayat Database</h3>
