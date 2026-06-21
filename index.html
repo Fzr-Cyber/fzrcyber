@@ -8,15 +8,16 @@
 * { box-sizing: border-box; font-family: sans-serif; }
 body { 
     background-color: #b1b5b9; 
+    /* Efek tekstur garis horizontal metalik sesuai contoh gambar premium */
     background-image: linear-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
     background-size: 100% 4px;
     padding: 15px 10px; 
     color: #2d3748; 
     margin: 0; 
 }
-.container { max-width: 1100px; margin: 0 auto; }
+.container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; }
 
-/* Navigasi Atas Responsif */
+/* Menu Navigasi Atas */
 .navbar-top { 
     background: #f8fafc; 
     padding: 10px; 
@@ -47,16 +48,24 @@ body {
 .dropdown-content a:hover { background-color: #f1f5f9; color: #1d4ed8; }
 .dropdown:hover .dropdown-content { display: block; }
 
-/* Header & Judul Panel */
+/* Header Judul Utama */
 header { text-align: left; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 header h2 { color: #1e293b !important; font-weight: bold !important; font-size: 22px; margin: 0; line-height: 1.2; }
 #user-display { margin: 4px 0 0 0; color: #475569; font-size: 13px; }
 
-/* Grid layout otomatis berubah menjadi 1 kolom penuh di layar HP */
+/* ==========================================================================
+   STRUKTUR LAYOUT RESPONSIVE (DENGAN RE-ORDER POSISI KHUSUS LAYAR HP)
+   ========================================================================== */
 .grid { display: grid; grid-template-columns: 370px 1fr; gap: 20px; }
+
 @media (max-width: 768px) { 
-    .grid { grid-template-columns: 1fr; gap: 15px; } 
+    /* Mengubah susunan grid menjadi susunan flex vertikal saat diakses dari HP */
+    .grid { display: flex !important; flex-direction: column !important; gap: 15px !important; } 
     header h2 { font-size: 19px; }
+    
+    /* Memaksa kotak tabel (yang berisi 3 kotak metrik) naik ke atas form input */
+    #table-card { order: 1 !important; }
+    #input-card { order: 2 !important; }
 }
 
 /* Desain Komponen Kartu Panel */
@@ -70,9 +79,9 @@ header h2 { color: #1e293b !important; font-weight: bold !important; font-size: 
     margin-bottom: 15px; 
 }
 
-/* Elemen Form Transaksi */
+/* Kolom Form Input */
 .form-group { margin-bottom: 14px; }
-label { display: block; font-size: 13px; color: #475569; margin-bottom: 4px; font-weight: 600; }
+label { display: block; font-size: 13px; color: #475569; margin-bottom: 4px; font-weight: 600; text-align: left; }
 input, select { 
     width: 100%; 
     padding: 12px; 
@@ -84,7 +93,7 @@ input, select {
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
 
-/* Desain Tombol Kontrol */
+/* Desain Tombol */
 .btn-submit { 
     width: 100%; 
     background: linear-gradient(to bottom, #064e3b, #022c22); 
@@ -111,68 +120,48 @@ input, select {
 }
 .btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
 
-/* ==========================================================================
-   PENATAAN KOTAK METRIK SECARA KHUSUS UNTUK DEKSTOP DAN LAYAR HP
-   ========================================================================== */
+/* Tiga Kotak Ringkasan Utama */
 .summary-box { 
     display: grid !important; 
-    grid-template-columns: 1fr 1fr 1fr !important; /* Susunan 3 kolom menyamping di komputer */
+    grid-template-columns: 1fr 1fr 1fr !important; /* Susunan 3 kolom menyamping di desktop komputer */
     gap: 12px !important; 
     margin-bottom: 20px !important; 
 }
 
-/* Dasar Elemen Kontainer Kotak Metrik */
 .summary-box div, .card-income, .card-expense, div[class^="card-"] { 
     background-color: #f8fafc !important; 
     border: 1px solid #cbd5e1 !important; 
     padding: 14px 12px !important; 
     border-radius: 12px !important; 
-    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 8px 16px rgba(0,0,0,0.1) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 8px 16px rgba(0,0,0,0.1) !important; 
+    display: flex !important; 
+    flex-direction: column !important; 
+    justify-content: center !important; 
     min-height: 95px !important; 
-    width: 100% !important;
+    width: 100% !important; 
     margin-bottom: 0 !important;
 }
 
-/* Seting warna pastel */
 .summary-box > div:nth-child(1), .card-income { background: linear-gradient(to bottom, #f0fdf4, #e6fbf0) !important; border-color: #bbf7d0 !important; }
 .summary-box > div:nth-child(2), .card-expense { background: linear-gradient(to bottom, #fff5f5, #ffe4e6) !important; border-color: #fecdd3 !important; }
 .summary-box > div:nth-child(3) { background: #f8fafc !important; border-color: #cbd5e1 !important; }
 
-/* Label Judul Kecil Atas */
 .summary-box small { 
-    font-size: 11px !important; 
-    color: #475569 !important; 
-    font-weight: 600 !important;
-    margin-bottom: 4px !important;
-    display: block !important;
-    text-align: center !important;
-    text-transform: uppercase;
+    font-size: 11px !important; color: #475569 !important; font-weight: 600 !important; margin-bottom: 4px !important; display: block !important; text-align: center !important; text-transform: uppercase; 
 }
 
-/* Mengunci teks finansial (Georgia) bawaan */
 .card-amount, .summary-box p, .summary-box div, .summary-box span, .card-amount * { 
-    font-family: 'Georgia', 'Times New Roman', serif !important;
-    font-size: 18px !important; 
-    font-weight: normal !important; 
-    margin: 2px 0 0 0 !important; 
-    line-height: 1.4 !important; 
-    width: 100% !important;
-    display: block !important;
-    text-align: center !important;
+    font-family: 'Georgia', serif !important; font-size: 18px !important; margin: 2px 0 0 0 !important; line-height: 1.4 !important; width: 100% !important; display: block !important; text-align: center !important;
 }
 .card-income .card-amount, .summary-box > div:nth-child(1) p { color: #166534 !important; }
 .card-expense .card-amount, .summary-box > div:nth-child(2) p { color: #991b1b !important; }
-.summary-box > div:nth-child(3) p, .summary-box > div:nth-child(3) div { color: #1e293b !important; }
 
-/* PENGATURAN KHUSUS RESPONSIVE UNTUK LAYAR HANDPHONE (HP) */
+/* OPTIMALISASI TAMPILAN KOTAK METRIK SAAT DI LAYAR HP */
 @media (max-width: 600px) {
-    /* Mengubah susunan 3 kotak menjadi memanjang ke bawah secara rapi */
+    /* Mengubah 3 kotak ringkasan menjadi memanjang ke bawah dengan rapi agar seimbang */
     .summary-box { grid-template-columns: 1fr !important; gap: 10px !important; }
     
-    /* Memaksa konten teks Rp dan USD di HP agar berjejer menyamping agar hemat ruang */
+    /* Memaksa konten teks Rp dan USD berjejer ke samping agar menghemat ruang layar HP */
     .card-amount, .summary-box p, .summary-box div, .summary-box span, .card-amount * {
         display: inline-block !important;
         width: auto !important;
@@ -180,7 +169,6 @@ input, select {
         margin: 0 6px !important;
     }
     
-    /* Mengurangi tinggi kotak metrik di HP agar lebih minimalis */
     .summary-box div, .card-income, .card-expense, div[class^="card-"] {
         min-height: 65px !important;
         flex-direction: column !important;
@@ -188,25 +176,26 @@ input, select {
     }
 }
 
-/* Tabel database responsif: Bisa digeser ke kanan-kiri dengan mulus di HP */
+/* Tabel Database */
 #table-card h3 { font-weight: bold !important; font-size: 17px; color: #1e293b; margin-top: 0; margin-bottom: 12px; }
 table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; margin-top: 10px; }
 th { padding: 10px 12px; background-color: #edf2f7; color: #475569; font-weight: 600; border-bottom: 2px solid #cbd5e1; white-space: nowrap; }
 td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #2d3748; white-space: nowrap; }
 tr:hover td { background-color: #f1f5f9; }
 
-/* Bungkus tabel agar mendukung fitur geser di layar HP */
-#table-card > div, .card > div {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-}
+/* Wrapper pembungkus tabel agar tabel bisa digeser ke kanan-kiri di layar HP */
+#table-card > div, .card > div { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
 
 .text-income { color: #059669; font-weight: bold; text-align: right; }
 .text-expense { color: #dc2626; font-weight: bold; text-align: right; }
 
-/* Halaman Login */
-.auth-container { max-width: 95%; margin: 50px auto; background: #f8fafc; padding: 25px; border-radius: 16px; box-shadow: 0 20px 30px rgba(0,0,0,0.2); border: 1px solid #cbd5e1; }
-.auth-toggle { text-align: center; margin-top: 16px; font-size: 13px; color: #1d4ed8; cursor: pointer; }
+/* Halaman Login / Authentication Card */
+.auth-container { 
+    max-width: 380px; margin: 80px auto; background: #f8fafc; padding: 30px 24px; border-radius: 16px; border: 1px solid #cbd5e1; text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 15px 35px rgba(0,0,0,0.2); 
+}
+.auth-container h2 { font-family: 'Georgia', serif !important; font-weight: bold !important; color: #1e293b !important; font-size: 24px !important; margin-bottom: 20px !important; }
+.auth-toggle { text-align: center; margin-top: 18px; font-size: 13px; color: #1d4ed8; cursor: pointer; font-weight: 500; }
 .hidden { display: none !important; }
 .admin-badge { background-color: #4f46e5; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 .currency-row { display: grid; grid-template-columns: 85px 1fr; gap: 8px; }
