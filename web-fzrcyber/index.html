@@ -6,183 +6,102 @@
     <title>FZRCyber - Panel Keuangan Cloud Global</title>
     <style>
 /* ==========================================================================
-   GANTI SEMUA KODE DI DALAM TAG <style> ANDA DENGAN KODE BERIKUT
+   PASTI BERUBAH: GANTI SEMUA KODE DI DALAM TAG <style> ANDA DENGAN INI
    ========================================================================== */
-* { box-sizing: border-box; }
-body { 
-    background-color: #d1d5db; 
-    /* Efek tekstur garis metalik horizontal pada latar belakang */
-    background-image: linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
-    background-size: 100% 4px;
-    padding: 30px 20px; 
-    color: #2d3748; 
-    margin: 0; 
-}
+* { box-sizing: border-box; font-family: sans-serif; }
+body { background-color: #f3f4f6; padding: 20px; color: #333; margin: 0; }
 .container { max-width: 1100px; margin: 0 auto; }
 
-/* Menu Navigasi Atas dengan Efek Kaca Pop-out */
-.navbar-top { 
-    background: #f8fafc; 
-    padding: 14px 24px; 
-    border-radius: 8px; 
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 8px 16px rgba(0,0,0,0.15); 
-    margin-bottom: 25px; 
-    display: flex; 
-    justify-content: flex-start; 
-    gap: 15px; 
-    border: 1px solid #cbd5e1; 
-}
+/* Navbar Atas */
+.navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; }
 .dropdown { position: relative; display: inline-block; }
-.dropbtn { 
-    background: linear-gradient(to bottom, #1e40af, #1d4ed8); 
-    color: white; 
-    padding: 10px 20px; 
-    font-size: 14px; 
-    font-weight: 500; 
-    border: 1px solid #172554; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-.dropdown-content { 
-    display: none; 
-    position: absolute; 
-    background-color: white; 
-    min-width: 190px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-    border-radius: 6px; 
-    z-index: 1000; 
-    margin-top: 6px; 
-    border: 1px solid #cbd5e1; 
-}
-.dropdown-content a { color: #1e293b; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; }
-.dropdown-content a:hover { background-color: #f1f5f9; color: #1d4ed8; }
+.dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.dropbtn:hover { background-color: #4338ca; }
+.dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: 5px; }
+.dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; transition: 0.2s; }
+.dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
 .dropdown:hover .dropdown-content { display: block; }
 
-/* Judul Utama dengan Font Serif Klasik Elegan */
-header h2, .grid h2, h2, h3 { 
-    font-family: 'Georgia', 'Times New Roman', serif !important; 
-    color: #1e293b !important;
-    font-weight: normal !important;
-}
-header { text-align: left; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-.grid { display: grid; grid-template-columns: 380px 1fr; gap: 30px; }
+/* Header & Grid Layout */
+header { text-align: center; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+.grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
 @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-/* Desain Kartu Panel dengan Efek Bayangan 3D Tebal Lembut */
-.card, #table-card { 
-    background: #f8fafc; 
-    padding: 26px; 
-    border-radius: 12px; 
-    border: 1px solid #cbd5e1;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 10px 25px rgba(0,0,0,0.15); 
-    height: fit-content; 
-    margin-bottom: 20px; 
-}
+/* Formulir Input */
+.card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: fit-content; margin-bottom: 20px; }
+.form-group { margin-bottom: 15px; }
+label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+input, select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
 
-/* Form Input Bergaya Klasik Semi-Matte */
-.form-group { margin-bottom: 18px; }
-label { display: block; font-size: 14px; color: #475569; margin-bottom: 6px; font-family: 'Inter', sans-serif; }
-input, select { 
-    width: 100%; 
-    padding: 12px 14px; 
-    border: 1px solid #cbd5e1; 
-    border-radius: 8px; 
-    font-size: 14px; 
-    color: #1e293b; 
-    background: linear-gradient(to bottom, #f1f5f9, #e2e8f0); 
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-}
-
-/* Tombol Transaksi Hijau Tua Gradasi */
-.btn-submit { 
-    width: 100%; 
-    background: linear-gradient(to bottom, #14532d, #166534); 
-    color: white; 
-    border: 1px solid #052e16; 
-    padding: 14px; 
-    border-radius: 8px; 
-    font-size: 14px; 
-    font-weight: 500; 
-    cursor: pointer; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-}
-/* Tombol Keluar Akun Merah Gradasi Bulat */
-.btn-logout { 
-    background: linear-gradient(to bottom, #991b1b, #7f1d1d); 
-    color: white; 
-    padding: 10px 20px; 
-    border: 1px solid #450a0a; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-weight: 500; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-}
+/* Tombol-Tombol */
+.btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.btn-logout { background-color: #dc2626; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
 .btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
 
-/* Tiga Kotak Metrik Ringkasan Pendapatan Bergaya Elegan */
-.summary-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; margin-bottom: 25px; }
+/* ==========================================================================
+   SOLUSI UTAMA: MENYAMAKAN UKURAN DAN DESAIN TIGA KOTAK METRIK SECARA PAKSA
+   ========================================================================== */
+.summary-box { 
+    display: grid !important; 
+    grid-template-columns: 1fr 1fr 1fr !important; /* Membagi 3 kolom sama rata */
+    gap: 15px !important; 
+    margin-bottom: 20px !important; 
+}
 
-/* Penyeragaman struktur bentuk & bayangan untuk ketiga kotak metrik */
-.summary-box > div, .card-income, .card-expense { 
-    background-color: #f8fafc !important; 
+/* Menargetkan class asli HTML Anda agar ukurannya langsung seragam, rapi, dan simetris */
+.card-income, .card-expense, .summary-box > div { 
+    background-color: white !important; 
     border: 1px solid #cbd5e1 !important; 
-    padding: 20px 14px !important; 
+    padding: 15px !important; 
     border-radius: 12px !important; 
     text-align: center !important; 
-    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 8px 16px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
-    min-height: 110px !important;
+    min-height: 115px !important; /* Mengunci tinggi kotak agar sama presisi */
+    width: 100% !important;
 }
 
-/* Sentuhan gradasi warna latar belakang pastel lembut di masing-masing kotak */
-.summary-box > div:nth-child(1), .card-income { background: linear-gradient(to bottom, #f0fdf4, #dcfce7) !important; border-color: #bbf7d0 !important; }
-.summary-box > div:nth-child(2), .card-expense { background: linear-gradient(to bottom, #fff5f5, #ffe4e6) !important; border-color: #fecdd3 !important; }
-.summary-box > div:nth-child(3) { background: #f8fafc !important; }
+/* Memberikan warna latar belakang pastel yang sangat lembut dan elegan sesuai contoh gambar */
+.card-income, .summary-box > div:nth-child(1) { background-color: #f0fdf4 !important; border-color: #bbf7d0 !important; }
+.card-expense, .summary-box > div:nth-child(2) { background-color: #fff5f5 !important; border-color: #fecdd3 !important; }
+.summary-box > div:nth-child(3) { background-color: #f8fafc !important; border-color: #e2e8f0 !important; }
 
-/* Label Teks Kecil Kotak Metrik */
-.summary-box > div small, .card-income small, .card-expense small {
-    font-family: 'Inter', sans-serif !important;
-    font-size: 12px !important;
-    color: #475569 !important;
-    margin-bottom: 8px !important;
+/* Desain Teks Atas Kotak */
+.card-income small, .card-expense small, .summary-box > div small { 
+    font-size: 12px !important; 
+    color: #475569 !important; 
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
     display: block !important;
 }
 
-/* Tipografi Angka Finansial Menggunakan Serif Mewah */
-.card-amount, .summary-box > div p, .summary-box > div div { 
-    font-family: 'Georgia', 'Times New Roman', serif !important;
-    font-size: 20px !important; 
-    font-weight: normal !important; 
-    color: #1e293b !important;
+/* Desain Angka Nominal Finansial */
+.card-amount, .summary-box > div p { 
+    font-size: 18px !important; 
+    font-weight: bold !important; 
+    margin: 5px 0 0 0 !important; 
     line-height: 1.4 !important; 
 }
+.card-income .card-amount, .summary-box > div:nth-child(1) p { color: #166534 !important; }
+.card-expense .card-amount, .summary-box > div:nth-child(2) p { color: #991b1b !important; }
+.summary-box > div:nth-child(3) p { color: #1e293b !important; }
 
-/* Tabel Riwayat Database Bergaya Elegan Mulus */
-table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; font-size: 14px; margin-top: 15px; }
-th { 
-    padding: 14px; 
-    background-color: #e2e8f0; 
-    color: #334155; 
-    font-weight: 500; 
-    border-bottom: 2px solid #cbd5e1; 
-    font-family: 'Georgia', serif;
-}
-td { 
-    padding: 14px; 
-    border-bottom: 1px solid #e2e8f0; 
-    color: #334155; 
-    background-color: #f1f5f9;
-}
+/* Tabel Database */
+#table-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+th, td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
+.text-income { color: #059669; font-weight: bold; text-align: right; }
+.text-expense { color: #dc2626; font-weight: bold; text-align: right; }
 
-/* Halaman Otentikasi / Login */
-.auth-container { max-width: 400px; margin: 100px auto; background: #f8fafc; padding: 40px; border-radius: 16px; box-shadow: 0 20px 30px rgba(0,0,0,0.2); border: 1px solid #cbd5e1; }
-.auth-toggle { text-align: center; margin-top: 18px; font-size: 14px; color: #1d4ed8; cursor: pointer; }
+/* Halaman Login */
+.auth-container { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.auth-toggle { text-align: center; margin-top: 15px; font-size: 14px; color: #4f46e5; cursor: pointer; }
 .hidden { display: none !important; }
-.admin-badge { background-color: #1e40af; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-.currency-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; }
+.admin-badge { background-color: #4f46e5; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+.currency-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; }
+
     </style>
 </head>
 <body>
