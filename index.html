@@ -488,29 +488,35 @@ tr:hover td { background-color: #f1f5f9; }
             });
         }
 
-        function bersihkanTanggal(rawDate) {
+       function bersihkanTanggal(rawDate) {
     if (!rawDate) return "";
     try {
+        // Mengubah objek menjadi teks string biasa
         let textStr = String(rawDate);
         
-        // JIKA DATA MEMILIKI FORMAT WAKTU GLOBAL (Ada huruf 'T')
-        if (textStr.includes('T')) {
-            let d = new Date(textStr);
-            let dd = String(d.getDate()).padStart(2, '0');
-            let mm = String(d.getMonth() + 1).padStart(2, '0');
-            let yyyy = d.getFullYear();
-            return `${dd}/${mm}/${yyyy}`; // Mengembalikan tanggal lokal yang akurat (21)
+        // Jika ada format waktu 'T', ambil bagian tanggalnya saja
+        if (textStr.indexOf('T') !== -1) {
+            textStr = textStr.split('T')[0];
         }
         
-        // JIKA DATA HANYA TEKS TANGGAL BIASA (YYYY-MM-DD)
-        let parts = textStr.split('-'); 
-        if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        // Memecah teks "2026-06-22" berdasarkan tanda hubung "-"
+        let parts = textStr.split('-');
+        if (parts.length === 3) {
+            // Urutan array JavaScript: [0] = Tahun, [1] = Bulan, [2] = Tanggal
+            let tahun = parts[0];
+            let bulan = parts[1];
+            let tanggal = parts[2].substring(0, 2); 
+            
+            // Satukan kembali menjadi format Indonesia (DD/MM/YYYY)
+            return tanggal + '/' + bulan + '/' + tahun;
+        }
         
-        return textStr.substring(0, 10);
+        return textStr;
     } catch(e) { 
-        return String(rawDate).substring(0, 10); 
+        return String(rawDate); 
     }
 }
+
 
         function formatUang(nilai, jenisMataUang) {
             let angka = parseFloat(nilai) || 0;
