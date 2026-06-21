@@ -5,87 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FZRCyber - Panel Keuangan Cloud Global</title>
     <style>
-/* ==========================================================================
-   KODE CSS UTUH: HAPUS SEMUA ISI <style> ANDA DAN GANTI DENGAN KODE BERIKUT
-   ========================================================================== */
-* { box-sizing: border-box; font-family: sans-serif; }
-body { background-color: #f3f4f6; padding: 20px; color: #333; margin: 0; }
-.container { max-width: 1100px; margin: 0 auto; }
+        * { box-sizing: border-box; font-family: sans-serif; }
+        body { background-color: #f3f4f6; padding: 20px; color: #333; margin: 0; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        /* DESAIN MENU DROPDOWN BARU DI BAGIAN ATAS */
+        .navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; align-items: center; }
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .dropbtn:hover { background-color: #4338ca; }
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: 5px; overflow: hidden; }
+        .dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; transition: 0.2s; }
+        .dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
+        .dropdown:hover .dropdown-content { display: block; }
 
-.navbar-top { background: white; padding: 10px 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 20px; }
-.dropdown { position: relative; display: inline-block; }
-.dropbtn { background-color: #4f46e5; color: white; padding: 10px 16px; font-size: 14px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-.dropdown-content { display: none; position: absolute; background-color: white; min-width: 180px; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1000; margin-top: 5px; }
-.dropdown-content a { color: #333; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; }
-.dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
-.dropdown:hover .dropdown-content { display: block; }
-
-header { text-align: center; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-.grid { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
-@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-.card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: fit-content; margin-bottom: 20px; }
-.form-group { margin-bottom: 15px; }
-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-input, select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
-
-.btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-.btn-logout { background-color: #dc2626; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
-.btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-
-/* MENYAMAKAN UKURAN KOTAK DI BROWSER SECARA PAKSA */
-.summary-box { 
-    display: grid !important; 
-    grid-template-columns: 1fr 1fr 1fr !important; 
-    gap: 15px !important; 
-    margin-bottom: 20px !important; 
-}
-
-/* Penyeragaman total seluruh elemen kontainer di dalam blok summary-box */
-.summary-box > div, .card-income, .card-expense { 
-    background-color: white !important; 
-    border: 1px solid #cbd5e1 !important; 
-    padding: 15px !important; 
-    border-radius: 12px !important; 
-    text-align: center !important; 
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    min-height: 115px !important; 
-    width: 100% !important;
-}
-
-.card-income { background-color: #f0fdf4 !important; border-color: #bbf7d0 !important; }
-.card-expense { background-color: #fff5f5 !important; border-color: #fecdd3 !important; }
-.summary-box > div:nth-child(3) { background-color: #f8fafc !important; border-color: #e2e8f0 !important; }
-
-.card-income small, .card-expense small, .summary-box > div small { font-size: 12px !important; color: #475569 !important; font-weight: 600 !important; display: block !important; margin-bottom: 4px !important; }
-.card-amount, .summary-box > div p, .summary-box > div div { font-size: 18px !important; font-weight: bold !important; margin: 5px 0 0 0 !important; line-height: 1.4 !important; width: 100% !important; display: block !important; }
-.card-income .card-amount { color: #166534 !important; }
-.card-expense .card-amount { color: #991b1b !important; }
-.summary-box > div:nth-child(3) p, .summary-box > div:nth-child(3) div { color: #1e293b !important; }
-
-#table-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
-th, td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
-.text-income { color: #059669; font-weight: bold; text-align: right; }
-.text-expense { color: #dc2626; font-weight: bold; text-align: right; }
-.auth-container { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-.auth-toggle { text-align: center; margin-top: 15px; font-size: 14px; color: #4f46e5; cursor: pointer; }
-.hidden { display: none !important; }
-.admin-badge { background-color: #4f46e5; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-.currency-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; }
-
-
-/* Halaman Login */
-.auth-container { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-.auth-toggle { text-align: center; margin-top: 15px; font-size: 14px; color: #4f46e5; cursor: pointer; }
-.hidden { display: none !important; }
-.admin-badge { background-color: #4f46e5; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-.currency-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; }
+        header { text-align: center; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .grid { grid-template-columns: 350px 1fr; } }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); height: fit-content; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+        .btn-submit { width: 100%; background-color: #059669; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-logout { background-color: #dc2626; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-delete { background-color: #dc2626; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        
+        /* Layout Grid 3 Kolom untuk Statistik Atas */
+        .summary-box { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; width: 100%; }
+        @media (min-width: 600px) { .summary-box { grid-template-columns: 1fr 1fr 1fr; } }
+        
+        .card-income { background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 15px; border-radius: 12px; text-align: center; }
+        .card-expense { background-color: #fff1f2; border: 1px solid #fecdd3; padding: 15px; border-radius: 12px; text-align: center; }
+        .card-ending { background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; text-align: center; }
+        .card-amount { font-size: 18px; font-weight: bold; margin: 5px 0 0 0; color: #065f46; line-height: 1.4; }
+        .card-expense .card-amount { color: #9f1239; }
+        
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th, td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
+        .text-income { color: #059669; font-weight: bold; text-align: right; }
+        .text-expense { color: #dc2626; font-weight: bold; text-align: right; }
+        .auth-container { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .auth-toggle { text-align: center; margin-top: 15px; font-size: 14px; color: #4f46e5; cursor: pointer; }
+        .hidden { display: none !important; }
+        .admin-badge { background-color: #4f46e5; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+        .currency-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; }
     </style>
 </head>
 <body>
+
     <div id="nav-top-container" class="container hidden" style="margin-top: 10px; margin-bottom: -10px;">
         <div class="navbar-top">
             <div class="dropdown">
@@ -96,6 +63,7 @@ th, td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
                     <a href="#" onclick="alert('Fitur Laporan Segera Datang!')">Laporan Tahunan</a>
                 </div>
             </div>
+            
             <div class="dropdown">
                 <button class="dropbtn" style="background-color: #4b5563;">Menu Lainnya ▼</button>
                 <div class="dropdown-content">
